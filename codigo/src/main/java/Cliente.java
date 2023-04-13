@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class Cliente {
@@ -7,6 +8,22 @@ public class Cliente {
     private String senha;
     List<Serie> listaParaVer;
     List<Serie> listaJaVistas;
+
+    public String getNomeUsuario() {
+        return nomeUsuario;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public List<Serie> getListaParaVer() {
+        return listaParaVer;
+    }
+
+    public List<Serie> getListaJaVistas() {
+        return listaJaVistas;
+    }
 
     public Cliente(String nomeUsuario, String senha) {
         this.nomeUsuario = nomeUsuario;
@@ -34,14 +51,11 @@ public class Cliente {
     }
 
     public void registrarAudiencia(Serie serie) {
-        serie.registrarAudiencia();
-        boolean visto = false;
-
-//        for (Serie serievista: this.listaJaVistas
-//             ) {
-//            if (serievista.titulo.equals serie.titulo
-//        }
-        // TODO ver se ja foi adicionada
+        Optional<Serie> existe = listaJaVistas.stream().filter(s -> s.equals(serie)).findFirst();
+        if (existe.isEmpty()) {
+            serie.registrarAudiencia();
+            this.listaJaVistas.add(serie);
+        }
     }
 
 }
