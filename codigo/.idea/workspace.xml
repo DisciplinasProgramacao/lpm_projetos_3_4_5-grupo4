@@ -5,7 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8bb03d91-69a1-4568-a1de-79865415b611" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/test/java/SerieTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/SerieTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Cliente.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Cliente.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,7 +47,16 @@
     "project.structure.side.proportion": "0.0"
   }
 }]]></component>
-  <component name="RunManager" selected="JUnit.SerieTest">
+  <component name="RunManager" selected="JUnit.ClienteTest">
+    <configuration name="ClienteTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Trab3" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="ClienteTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="LeituraTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="Trab3" />
       <option name="PACKAGE_NAME" value="" />
@@ -80,6 +90,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.ClienteTest" />
         <item itemvalue="JUnit.SerieTest" />
         <item itemvalue="JUnit.LeituraTest" />
       </list>

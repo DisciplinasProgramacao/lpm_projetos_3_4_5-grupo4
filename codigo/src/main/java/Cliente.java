@@ -28,6 +28,8 @@ public class Cliente {
     public Cliente(String nomeUsuario, String senha) {
         this.nomeUsuario = nomeUsuario;
         this.senha = senha;
+        this.listaJaVistas = new ArrayList<>();
+        this.listaParaVer = new ArrayList<>();
     }
 
     public void adicionarNaLista(Serie serie) {
