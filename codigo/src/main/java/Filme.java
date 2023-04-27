@@ -1,3 +1,5 @@
+import java.util.Date;
+
 public class Filme extends Media {
 
     private Integer duracao;
@@ -11,9 +13,7 @@ public class Filme extends Media {
     
     public Filme(String[] dadosLidos) {
     	super(dadosLidos[1], "", "");
-		this.id = dadosLidos[0];
-		this.nome = dadosLidos[1];
-		this.dataLancamento = dadosLidos[2];
+		this.dataLancamento = new Date(dadosLidos[2]);
 		this.duracao = Integer.parseInt(dadosLidos[3]);
 	}
     public Integer getDuracao() {
