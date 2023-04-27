@@ -19,7 +19,7 @@ public class Filme extends Media {
         return dataLancamento;
     }
 
-    public Integer getDuracaoSegundos() {
+    public Integer passaDuracaoParaSegundos() {
         return duracao * 60;
     }
 }
