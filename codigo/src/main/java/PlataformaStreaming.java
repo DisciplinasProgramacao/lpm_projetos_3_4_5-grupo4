@@ -9,6 +9,13 @@ public class PlataformaStreaming {
     private HashSet<Cliente> clientes;
     private Cliente clienteAtual;
 
+    public PlataformaStreaming(String nome) {
+        this.nome = nome;
+        midias = new HashSet<>();
+        clientes = new HashSet<>();
+        clienteAtual = null;
+    }
+
     public Cliente login(String nomeUsuario, String senha) {
         Optional<Cliente> cliente = clientes.stream().filter(c -> c.getNomeUsuario().equals(nomeUsuario) && c.getSenha().equals(senha)).findFirst();
         clienteAtual = cliente.orElse(null);
