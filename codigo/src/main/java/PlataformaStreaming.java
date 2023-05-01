@@ -24,10 +24,12 @@ public class PlataformaStreaming {
     }
 
     public void adicionarMidia(Media midia) {
+        if (midia == null) return;
         midias.add(midia);
     }
 
     public void adicionarCliente(Cliente cliente) {
+        if (cliente == null) return;
         clientes.add(cliente);
     }
 
