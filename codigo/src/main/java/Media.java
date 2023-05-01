@@ -6,7 +6,7 @@ public abstract class Media {
     private String nome;
     private String genero;
     private String idioma;
-    private Integer audiencia = 0;
+    private Integer audiencia;
 
     public Media(String nome, String genero, String idioma) {
         Optional<String> existeGenero = Arrays.stream(GENEROS).filter(g -> g.equals(genero)).findFirst();
@@ -17,6 +17,7 @@ public abstract class Media {
         }
         this.nome = nome;
         this.idioma = idioma;
+        audiencia = 0;
     }
 
     public String getNome() {
