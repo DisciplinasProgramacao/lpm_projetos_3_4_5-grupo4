@@ -10,12 +10,13 @@ public class Filme extends Media {
         this.dataLancamento = dataLancamento;
         this.duracao = duracao;
     }
-    
+
     public Filme(String[] dadosLidos) {
-    	super(dadosLidos[1], "", "");
-		this.dataLancamento = new Date(dadosLidos[2]);
-		this.duracao = Integer.parseInt(dadosLidos[3]);
-	}
+        super(dadosLidos[1], "", "");
+        this.dataLancamento = new Date(dadosLidos[2]);
+        this.duracao = Integer.parseInt(dadosLidos[3]);
+    }
+
     public Integer getDuracao() {
         return duracao;
     }
@@ -26,5 +27,9 @@ public class Filme extends Media {
 
     public Integer getDuracaoSegundos() {
         return duracao * 60;
+    }
+
+    public String toString() {
+        return super.toString() + "Duracao: " + this.duracao;
     }
 }

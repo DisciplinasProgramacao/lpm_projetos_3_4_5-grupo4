@@ -39,4 +39,9 @@ public abstract class Media {
     public void registrarAudiencia() {
         this.audiencia++;
     }
+
+    public String toString() {
+        return "Nome: " + this.nome + "Genero: " + this.genero + "Idioma: " + this.idioma + "Duracao: " + this.duracao
+                + "Lancamento: " + this.Lancamento;
+    }
 }
