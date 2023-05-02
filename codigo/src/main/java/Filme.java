@@ -1,4 +1,5 @@
 import java.util.Date;
+import java.util.Scanner;
 
 public class Filme extends Media {
 
@@ -27,4 +28,23 @@ public class Filme extends Media {
     public Integer getDuracaoSegundos() {
         return duracao * 60;
     }
+
+    public void CadastraFilmeClientSide(){
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("Seja bem-vindo ao cadastro de Filmes!");
+        System.out.println("Digite o Id do filme:");
+        int idFilme = sc.nextInt();
+        System.out.println("Digite o Nome do filme:");
+        String nomeFilme = sc.nextLine();
+        System.out.println("Digite a data de lancamento do filme:");
+        String dataLancamento = sc.nextLine();
+        System.out.println("Digite a duracao do filme:");
+        int duracaoFilme = sc.nextInt();
+    
+         
+
+    }
+
+    
 }
