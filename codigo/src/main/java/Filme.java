@@ -30,6 +30,7 @@ public class Filme extends Media {
     }
 
     public String toString() {
-        return super.toString() + "Duracao: " + this.duracao;
+        return super.toString() + ". Duracao: " + this.duracao + ". Data de lançamento"
+                + this.dataLancamento.toString();
     }
 }
