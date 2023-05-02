@@ -40,8 +40,13 @@ public abstract class Media {
         this.audiencia++;
     }
 
+    @Override
     public String toString() {
-        return "Nome: " + this.nome + "Genero: " + this.genero + "Idioma: " + this.idioma + "Duracao: " + this.duracao
-                + "Lancamento: " + this.Lancamento;
+        return "Media{" +
+                "nome='" + nome + '\'' +
+                ", genero='" + genero + '\'' +
+                ", idioma='" + idioma + '\'' +
+                ", audiencia=" + audiencia +
+                '}';
     }
 }
