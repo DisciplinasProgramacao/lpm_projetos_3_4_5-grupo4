@@ -29,7 +29,12 @@ public class Filme extends Media {
         return duracao * 60;
     }
 
+    @Override
     public String toString() {
-        return super.toString() + "Duracao: " + this.duracao;
+        return super.toString() +
+                "\nFilme{" +
+                "duracao=" + duracao +
+                ", dataLancamento=" + dataLancamento +
+                '}';
     }
 }
