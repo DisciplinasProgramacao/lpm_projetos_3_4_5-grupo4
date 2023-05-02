@@ -1,8 +1,9 @@
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Filme extends Media {
 
-    private Integer duracao;
+    private Integer duracao, codigo;
     private Date dataLancamento;
 
     public Filme(String nome, String genero, String idioma, Integer duracao, Date dataLancamento) {
@@ -15,6 +16,7 @@ public class Filme extends Media {
         super(dadosLidos[1], "", "");
         this.dataLancamento = new Date(dadosLidos[2]);
         this.duracao = Integer.parseInt(dadosLidos[3]);
+        this.codigo = Integer.parseInt(dadosLidos[0]);
     }
 
     public Integer getDuracao() {
@@ -36,5 +38,11 @@ public class Filme extends Media {
                 "duracao=" + duracao +
                 ", dataLancamento=" + dataLancamento +
                 '}';
+    }
+
+    public String StringSalvar() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+        return this.codigo + ";" + this.getNome() + ";" + sdf.format(this.dataLancamento) + ";" + this.duracao;
     }
 }
