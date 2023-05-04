@@ -1,7 +1,10 @@
+import java.io.IOException;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
-public class Filme extends Media {
+public class Filme extends Media implements Serializable {
 
     private Integer duracao, codigo;
     private Date dataLancamento;
@@ -44,5 +47,15 @@ public class Filme extends Media {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
         return this.codigo + ";" + this.getNome() + ";" + sdf.format(this.dataLancamento) + ";" + this.duracao;
+    }
+
+    public static void salvarTodosFilmes(List<Filme> allFilmes) throws IOException {
+        GenericDao<Filme> filmeDao = new GenericDao<>();
+        filmeDao.save(allFilmes, "filmes.dat");
+    }
+
+    public static List<Filme> carregarTodosFilmes() throws IOException, ClassNotFoundException {
+        GenericDao<Filme> filmeDao = new GenericDao<>();
+        return filmeDao.load("filmes.dat");
     }
 }
