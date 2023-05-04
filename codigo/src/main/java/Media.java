@@ -1,5 +1,7 @@
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 public abstract class Media implements Serializable {
@@ -8,6 +10,7 @@ public abstract class Media implements Serializable {
     private String genero;
     private String idioma;
     private Integer audiencia;
+    private List<Integer> avaliacoes;
 
     public Media(String nome, String genero, String idioma) {
         Optional<String> existeGenero = Arrays.stream(GENEROS).filter(g -> g.equals(genero)).findFirst();
@@ -19,6 +22,7 @@ public abstract class Media implements Serializable {
         this.nome = nome;
         this.idioma = idioma;
         audiencia = 0;
+        avaliacoes = new ArrayList<>();
     }
 
     public String getNome() {
@@ -49,5 +53,13 @@ public abstract class Media implements Serializable {
                 ", idioma='" + idioma + '\'' +
                 ", audiencia=" + audiencia +
                 '}';
+    }
+
+    public List<Integer> getAvaliacoes() {
+        return avaliacoes;
+    }
+
+    public void addAvaliacao(Integer avaliacoes) {
+        this.avaliacoes.add(avaliacoes);
     }
 }

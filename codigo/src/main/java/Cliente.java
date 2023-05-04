@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static java.util.Objects.nonNull;
+
 public class Cliente implements Serializable {
     private String nomeUsuario;
     private String senha;
@@ -70,6 +72,13 @@ public class Cliente implements Serializable {
     public static List<Cliente> carregarTodosClientes() throws IOException, ClassNotFoundException {
         GenericDao<Cliente> clienteDao = new GenericDao<>();
         return clienteDao.load("clientes.dat");
+    }
+
+    public void avaliar(String nomeMedia, int nota) {
+        Media media = listaJaVistas.stream().filter(s -> s.getNome().equals(nomeMedia)).findFirst().orElse(null);
+        if (nonNull(media)) {
+            media.addAvaliacao(nota);
+        }
     }
 
 }
