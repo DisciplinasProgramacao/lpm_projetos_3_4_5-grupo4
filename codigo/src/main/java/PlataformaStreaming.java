@@ -34,17 +34,17 @@ public class PlataformaStreaming {
     }
 
     public List<Media> filtrarPorGenero(String genero) {
-        return new FilterMediaSet<>(midias).filter(m -> m.getGenero().equals(genero));
+        return midias.stream().filter(m -> m.getGenero().equals(genero)).collect(Collectors.toList());
     }
 
     public List<Media> filtrarPorIdioma(String idioma) {
-        return new FilterMediaSet<>(midias).filter(m -> m.getIdioma().equals(idioma));
+        return midias.stream().filter(m -> m.getIdioma().equals(idioma)).collect(Collectors.toList());
     }
 
     public List<Media> filtrarPorQtdEpisodios(int quantEpisodios) {
-        return new FilterMediaSet<>(midias).filter(m -> m instanceof Serie && ((Serie) m).getQuantidadeEpisodios().equals(quantEpisodios));
-    }
+        return midias.stream().filter(m -> m instanceof Serie && ((Serie) m).getQuantidadeEpisodios().equals(quantEpisodios)).collect(Collectors.toList());
 
+    }
     public Media buscarMidia(String nome) {
         Optional<Media> midia = midias.stream().filter(m -> m.getNome().equals(nome)).findFirst();
 

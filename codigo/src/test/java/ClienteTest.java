@@ -91,4 +91,17 @@ public class ClienteTest {
         assertTrue(cliente.getListaJaVistas().contains(serie1));
         assertTrue(cliente.getListaJaVistas().contains(serie2));
     }
+
+    @Test
+    void avaliarMedia() {
+        cliente.listaJaVistas.add(serie1);
+        cliente.avaliar(serie1.getNome(), 5);
+        assertTrue(serie1.getAvaliacoes().contains(5));
+    }
+
+    @Test
+    void tentarAvaliarMediaNaoVista() {
+        cliente.avaliar(serie1.getNome(), 5);
+        assertFalse(serie1.getAvaliacoes().contains(5));
+    }
 }
