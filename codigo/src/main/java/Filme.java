@@ -1,9 +1,10 @@
-import java.text.SimpleDateFormat;
+import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 public class Filme extends Media {
 
-    private Integer duracao, codigo;
+    private Integer duracao;
     private Date dataLancamento;
 
     public Filme(String nome, String genero, String idioma, Integer duracao, Date dataLancamento) {
@@ -11,14 +12,12 @@ public class Filme extends Media {
         this.dataLancamento = dataLancamento;
         this.duracao = duracao;
     }
-
+    
     public Filme(String[] dadosLidos) {
-        super(dadosLidos[1], "", "");
-        this.dataLancamento = new Date(dadosLidos[2]);
-        this.duracao = Integer.parseInt(dadosLidos[3]);
-        this.codigo = Integer.parseInt(dadosLidos[0]);
-    }
-
+    	super(dadosLidos[1], "", "");
+		this.dataLancamento = new Date(dadosLidos[2]);
+		this.duracao = Integer.parseInt(dadosLidos[3]);
+	}
     public Integer getDuracao() {
         return duracao;
     }
@@ -31,18 +30,13 @@ public class Filme extends Media {
         return duracao * 60;
     }
 
-    @Override
-    public String toString() {
-        return super.toString() +
-                "\nFilme{" +
-                "duracao=" + duracao +
-                ", dataLancamento=" + dataLancamento +
-                '}';
+    public static void salvarTodosFilmes(List<Filme> allFilmes) throws IOException {
+        GenericDao<Filme> filmeDao = new GenericDao<>();
+        filmeDao.save(allFilmes, "filmes.dat");
     }
 
-    public String StringSalvar() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-
-        return this.codigo + ";" + this.getNome() + ";" + sdf.format(this.dataLancamento) + ";" + this.duracao;
+    public static List<Filme> carregarTodosFilmes() throws IOException, ClassNotFoundException {
+        GenericDao<Filme> filmeDao = new GenericDao<>();
+        return filmeDao.load("filmes.dat");
     }
 }

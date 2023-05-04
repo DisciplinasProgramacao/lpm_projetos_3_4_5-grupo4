@@ -1,13 +1,15 @@
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class Cliente {
+public class Cliente implements Serializable {
     private String nomeUsuario;
     private String senha;
-    List<Serie> listaParaVer;
-    List<Serie> listaJaVistas;
+    List<Media> listaParaVer;
+    List<Media> listaJaVistas;
 
     public String getNomeUsuario() {
         return nomeUsuario;
@@ -17,11 +19,11 @@ public class Cliente {
         return senha;
     }
 
-    public List<Serie> getListaParaVer() {
+    public List<Media> getListaParaVer() {
         return listaParaVer;
     }
 
-    public List<Serie> getListaJaVistas() {
+    public List<Media> getListaJaVistas() {
         return listaJaVistas;
     }
 
@@ -32,32 +34,43 @@ public class Cliente {
         this.listaParaVer = new ArrayList<>();
     }
 
-    public void adicionarNaLista(Serie serie) {
-        listaParaVer.add(serie);
+    public void adicionarNaLista(Media media) {
+        listaParaVer.add(media);
     }
 
-    public void retirarDaLista(String nomeSerie) {
-        listaParaVer.removeIf(l -> l.getNome().equals(nomeSerie));
+    public void retirarDaLista(String nome) {
+        listaParaVer.removeIf(l -> l.getNome().equals(nome));
     }
 
-    public List<Serie> filtrarPorGenero(String genero) {
+    public List<Media> filtrarPorGenero(String genero) {
         return listaParaVer.stream().filter(l -> l.getGenero().equals(genero)).collect(Collectors.toList());
     }
 
-    public List<Serie> filtrarPorIdioma(String idioma) {
+    public List<Media> filtrarPorIdioma(String idioma) {
         return listaParaVer.stream().filter(l -> l.getIdioma().equals(idioma)).collect(Collectors.toList());
     }
+    // TODO: move to the right place (Vinicius)
 
-    public List<Serie> filtrarPorQtdeEpisodios(int qtde) {
-        return listaParaVer.stream().filter(l -> l.getQuantidadeEpisodios() == qtde).collect(Collectors.toList());
-    }
+//    public List<Media> filtrarPorQtdeEpisodios(int qtde) {
+//        return listaParaVer.stream().filter(l -> l.getQuantidadeEpisodios() == qtde).collect(Collectors.toList());
+//    }
 
     public void registrarAudiencia(Serie serie) {
-        Optional<Serie> existe = listaJaVistas.stream().filter(s -> s.equals(serie)).findFirst();
+        Optional<Media> existe = listaJaVistas.stream().filter(s -> s.equals(serie)).findFirst();
         if (existe.isEmpty()) {
             serie.registrarAudiencia();
             this.listaJaVistas.add(serie);
         }
+    }
+
+    public static void salvarTodosClientes(List<Cliente> allClientes) throws IOException {
+        GenericDao<Cliente> clienteDao = new GenericDao<>();
+        clienteDao.save(allClientes, "clientes.dat");
+    }
+
+    public static List<Cliente> carregarTodosClientes() throws IOException, ClassNotFoundException {
+        GenericDao<Cliente> clienteDao = new GenericDao<>();
+        return clienteDao.load("clientes.dat");
     }
 
 }

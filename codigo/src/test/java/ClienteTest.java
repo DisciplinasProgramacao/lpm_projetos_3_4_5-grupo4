@@ -25,7 +25,7 @@ public class ClienteTest {
         cliente.adicionarNaLista(serie1);
         cliente.adicionarNaLista(serie2);
 
-        List<Serie> listaParaVer = cliente.getListaParaVer();
+        List<Media> listaParaVer = cliente.getListaParaVer();
 
         assertEquals(2, listaParaVer.size());
         assertTrue(listaParaVer.contains(serie1));
@@ -39,7 +39,7 @@ public class ClienteTest {
 
         cliente.retirarDaLista("Calcinha Preta Documentário");
 
-        List<Serie> listaParaVer = cliente.getListaParaVer();
+        List<Media> listaParaVer = cliente.getListaParaVer();
 
         assertEquals(1, listaParaVer.size());
         assertFalse(listaParaVer.contains(serie1));
@@ -51,10 +51,10 @@ public class ClienteTest {
         cliente.adicionarNaLista(serie1);
         cliente.adicionarNaLista(serie2);
 
-        List<Serie> seriesFiltradas = cliente.filtrarPorGenero("Ação");
+        List<Media> mediaFiltradas = cliente.filtrarPorGenero("Ação");
 
-        assertEquals(1, seriesFiltradas.size());
-        assertTrue(seriesFiltradas.contains(serie1));
+        assertEquals(1, mediaFiltradas.size());
+        assertTrue(mediaFiltradas.contains(serie1));
     }
 
     @Test
@@ -62,22 +62,22 @@ public class ClienteTest {
         cliente.adicionarNaLista(serie1);
         cliente.adicionarNaLista(serie2);
 
-        List<Serie> seriesFiltradas = cliente.filtrarPorIdioma("russo");
+        List<Media> seriesFiltradas = cliente.filtrarPorIdioma("russo");
 
         assertEquals(1, seriesFiltradas.size());
         assertTrue(seriesFiltradas.contains(serie2));
     }
 
-    @Test
-    void testFiltrarPorQtdeEpisodios() {
-        cliente.adicionarNaLista(serie1);
-        cliente.adicionarNaLista(serie2);
-
-        List<Serie> seriesFiltradas = cliente.filtrarPorQtdeEpisodios(11);
-
-        assertEquals(1, seriesFiltradas.size());
-        assertTrue(seriesFiltradas.contains(serie1));
-    }
+//    @Test
+//    void testFiltrarPorQtdeEpisodios() {
+//        cliente.adicionarNaLista(serie1);
+//        cliente.adicionarNaLista(serie2);
+//
+//        List<Serie> seriesFiltradas = cliente.filtrarPorQtdeEpisodios(11);
+//
+//        assertEquals(1, seriesFiltradas.size());
+//        assertTrue(seriesFiltradas.contains(serie1));
+//    }
 
     @Test
     void testRegistrarAudiencia() {

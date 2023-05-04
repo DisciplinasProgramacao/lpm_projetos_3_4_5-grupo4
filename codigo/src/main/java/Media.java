@@ -1,7 +1,8 @@
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Optional;
 
-public abstract class Media {
+public abstract class Media implements Serializable {
     private static String[] GENEROS = { "Ação", "Comédia", "ROMANCE" };
     private String nome;
     private String genero;
@@ -38,15 +39,5 @@ public abstract class Media {
 
     public void registrarAudiencia() {
         this.audiencia++;
-    }
-
-    @Override
-    public String toString() {
-        return "Media{" +
-                "nome='" + nome + '\'' +
-                ", genero='" + genero + '\'' +
-                ", idioma='" + idioma + '\'' +
-                ", audiencia=" + audiencia +
-                '}';
     }
 }
