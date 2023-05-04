@@ -13,6 +13,11 @@
 |  3 |   Diagramas     |   Pierre    |  UML        |
 |  3 |   Baklog     |   Tito    |  Backlog.md        |
 |  3 |   Doc testes     |       |  Doc testes        |
+|  4 |   Avaliação     |   Fernando    |  Avaliações para filmes e series        |
+|  ---- |   ----     |   ----    |  ----        |
+|  ---- |   ----     |   ----    |  ----        |
+|  ---- |   ----     |   ----    |  ----        |
+
 
 
 > Written with [StackEdit](https://stackedit.io/).
