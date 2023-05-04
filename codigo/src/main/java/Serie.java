@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Scanner;
 
 public class Serie extends Media implements Serializable {
     private Integer quantidadeEpisodios;
@@ -26,4 +27,14 @@ public class Serie extends Media implements Serializable {
         GenericDao<Serie> serieDao = new GenericDao<>();
         return serieDao.load("series.dat");
     }
-}
+
+        public String geraDadosSerie() {
+
+            String nome = this.getNome();
+            int qtdeEpisodios = this.getQuantidadeEpisodios();
+            int idSerie = gerarId();
+            String dadosSerie = String.format("%d;%s;%d", idSerie, nome, qtdeEpisodios);
+
+            return dadosSerie;
+        }
+    }

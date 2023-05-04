@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 public abstract class Media implements Serializable {
     private static String[] GENEROS = { "Ação", "Comédia", "ROMANCE" };
@@ -61,5 +62,10 @@ public abstract class Media implements Serializable {
 
     public void addAvaliacao(Integer avaliacoes) {
         this.avaliacoes.add(avaliacoes);
+    }
+
+    public int gerarId() {
+        Random random = new Random();
+        return random.nextInt(10000) + 1;
     }
 }
