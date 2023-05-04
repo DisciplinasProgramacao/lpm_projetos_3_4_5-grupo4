@@ -23,6 +23,7 @@
 - testCarregarTodasSeries - Pendente
 - testSalvarTodasSeries - Pendente
 - Remover alguns testes que agora devem ser feitos na MediaTest (testVerificaAudiencia)
+- testGeraDadosSerie - OK
 
 # Filme
 - Implementar todos os testes da classe
