@@ -22,11 +22,22 @@ public class Main {
         Filme.salvarTodosFilmes(List.of(f,f2));
         Serie.salvarTodasSeries(List.of(s));
 
+
         List<Cliente> clientesLoaded = Cliente.carregarTodosClientes();
         List<Filme> filmesLoaded = Filme.carregarTodosFilmes();
         List<Serie> seriesLoaded = Serie.carregarTodasSeries();
         System.out.println(clientesLoaded);
         System.out.println(filmesLoaded);
         System.out.println(seriesLoaded);
+
+        PlataformaStreaming ps = new PlataformaStreaming("Netflix");
+        filmesLoaded.forEach(ps::adicionarMidia);
+        seriesLoaded.forEach(ps::adicionarMidia);
+
+        Filme modelFilme = new Filme("filme", "Romance", "en", 100, new Date());
+        System.out.println("filtrar -> idioma en: " + ps.filtrar(new CompareIdioma(), modelFilme));
+        System.out.println("filtrar -> genero romance: " + ps.filtrar(new CompareGenero(), modelFilme));
+        // FIXME erro de tipo
+//        System.out.println("filtrar -> qtd eps 10: " + ps.filtrar(new CompareQtdEpisodios(), new Serie("serie", "Romance", "en", 10)));
     }
 }

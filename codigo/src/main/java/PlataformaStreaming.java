@@ -1,3 +1,4 @@
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -33,16 +34,8 @@ public class PlataformaStreaming {
         clientes.add(cliente);
     }
 
-    public List<Media> filtrarPorGenero(String genero) {
-        return new FilterMediaSet<>(midias).filter(m -> m.getGenero().equals(genero));
-    }
-
-    public List<Media> filtrarPorIdioma(String idioma) {
-        return new FilterMediaSet<>(midias).filter(m -> m.getIdioma().equals(idioma));
-    }
-
-    public List<Media> filtrarPorQtdEpisodios(int quantEpisodios) {
-        return new FilterMediaSet<>(midias).filter(m -> m instanceof Serie && ((Serie) m).getQuantidadeEpisodios().equals(quantEpisodios));
+    public List<Media> filtrar(Comparator<Media> comparator, Media model) {
+        return midias.stream().filter((media -> comparator.compare(media, model) == 0)).collect(Collectors.toList());
     }
 
     public Media buscarMidia(String nome) {
