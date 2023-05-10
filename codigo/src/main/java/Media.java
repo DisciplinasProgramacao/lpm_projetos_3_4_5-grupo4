@@ -6,7 +6,7 @@ import java.util.Optional;
 import java.util.Random;
 
 public abstract class Media implements Serializable {
-    private static String[] GENEROS = { "Ação", "Comédia", "ROMANCE" };
+    private static String[] GENEROS = { "Ação", "Comédia", "Romance" };
     private String nome;
     private String genero;
     private String idioma;
