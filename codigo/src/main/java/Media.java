@@ -13,6 +13,8 @@ public abstract class Media implements Serializable {
     private Integer audiencia;
     private List<Integer> avaliacoes;
 
+    private Integer id;
+
     /**
      * Construtor da classe Media.
      *
@@ -117,5 +119,13 @@ public abstract class Media implements Serializable {
     public int gerarId() {
         Random random = new Random();
         return random.nextInt(10000) + 1;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }
