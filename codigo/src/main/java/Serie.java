@@ -60,6 +60,7 @@ public class Serie extends Media implements Serializable {
      * @return uma string com os dados da série no formato "idSerie;nome;quantidadeEpisodios"
      */
     public String geraDadosSerie() {
+
         String nome = this.getNome();
         int qtdeEpisodios = this.getQuantidadeEpisodios();
         int idSerie = gerarId();
