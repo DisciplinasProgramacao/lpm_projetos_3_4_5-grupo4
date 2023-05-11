@@ -33,12 +33,19 @@ public class Filme extends Media implements Serializable {
         return dataLancamento;
     }
 
+    /**
+     * Obtém a duração do filme em segundos.
+     *
+     * @return A duração do filme em segundos.
+     */
     public Integer getDuracaoSegundos() {
         return (duracao * 60);
     }
 
     /**
-     * 
+     * Realiza o cadastro de um filme a partir de entradas do usuário.
+     *
+     * @return Uma string contendo as informações do filme cadastrado.
      */
     public String cadastraFilmeClientSide(){
         Scanner sc = new Scanner(System.in);
@@ -63,6 +70,11 @@ public class Filme extends Media implements Serializable {
         return stringSalvaInformacoes;
     }
 
+    /**
+     * Gera os dados do filme formatados em uma string.
+     *
+     * @return Uma string contendo os dados do filme no formato "id;nome;dataLancamento;duração;genero;idioma".
+     */
     public String geraDadosFilme(){
         int idFilme = gerarId();
         String nomeFilme = getNome();
@@ -86,17 +98,35 @@ public class Filme extends Media implements Serializable {
                 '}';
     }
 
+    /**
+     * Retorna uma string contendo os dados do filme formatados para salvar.
+     *
+     * @return Uma string contendo os dados do filme no formato "codigo;nome;dataLancamento;duração".
+     */
     public String StringSalvar() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
         return this.codigo + ";" + this.getNome() + ";" + sdf.format(this.dataLancamento) + ";" + this.duracao;
     }
 
+    /**
+     * Salva todos os filmes em uma lista para um arquivo.
+     *
+     * @param allFilmes  A lista de filmes a serem salvos.
+     * @throws IOException  Se ocorrer um erro de E/S durante o processo de salvamento.
+     */
     public static void salvarTodosFilmes(List<Filme> allFilmes) throws IOException {
         GenericDao<Filme> filmeDao = new GenericDao<>();
         filmeDao.save(allFilmes, "filmes.dat");
     }
 
+    /**
+     * Carrega todos os filmes de um arquivo.
+     *
+     * @return Uma lista contendo todos os filmes carregados.
+     * @throws IOException  Se ocorrer um erro de E/S durante o processo de carregamento.
+     * @throws ClassNotFoundException  Se a classe do objeto carregado não for encontrada.
+     */
     public static List<Filme> carregarTodosFilmes() throws IOException, ClassNotFoundException {
         GenericDao<Filme> filmeDao = new GenericDao<>();
         return filmeDao.load("filmes.dat");
