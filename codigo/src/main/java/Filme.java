@@ -2,11 +2,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-<<<<<<< HEAD
 import java.util.Scanner;
-=======
 import java.util.List;
->>>>>>> d6ed25f82f991163269198bb62876774583002bf
 
 public class Filme extends Media implements Serializable {
 
@@ -37,7 +34,7 @@ public class Filme extends Media implements Serializable {
     }
 
     public Integer getDuracaoSegundos() {
-        return duracao * 60;
+        return (duracao * 60);
     }
 
     /**
@@ -64,6 +61,20 @@ public class Filme extends Media implements Serializable {
         String stringSalvaInformacoes = idFilme + ";" + nomeFilme + ";" + dataLancamentoFilme + ";" + duracaoFilme + ";" + generoFilme + ";" + idiomaFilme; 
         
         return stringSalvaInformacoes;
+    }
+
+    public String geraDadosFilme(){
+        int idFilme = gerarId();
+        String nomeFilme = getNome();
+        SimpleDateFormat sf = new SimpleDateFormat("dd/MM/yyyy");
+        String dataLancamentoFilme = sf.format(getDataLancamento());
+        Integer duracaoFilme = getDuracao();
+        String generoFilme = getGenero();
+        String idiomaFilme = getIdioma();
+
+        String dadosFilme = String.format("%d;%s;%s;%d;%s;%s", idFilme,  nomeFilme, dataLancamentoFilme, duracaoFilme, generoFilme, idiomaFilme);
+
+        return dadosFilme;
     }
 
     @Override
