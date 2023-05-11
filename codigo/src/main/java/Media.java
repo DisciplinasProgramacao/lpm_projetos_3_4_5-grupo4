@@ -7,11 +7,11 @@ import java.util.Random;
 
 public abstract class Media implements Serializable {
     private static String[] GENEROS = { "Ação", "Comédia", "Romance" };
-    private String nome;
-    private String genero;
-    private String idioma;
-    private Integer audiencia;
-    private List<Integer> avaliacoes;
+    protected String nome;
+    protected String genero;
+    protected String idioma;
+    protected Integer audiencia;
+    protected List<Integer> avaliacoes;
 
     private Integer id;
 
