@@ -9,6 +9,11 @@ public class ItemListaJaVista {
         this.listaJaVistas = media;
         this.dataVizualizacao = dataa;
     }
+    public ItemListaJaVista(Media media){
+        Date hoje = new Date();
+        this.listaJaVistas = media;
+        this.dataVizualizacao = hoje;
+    }
 
     public boolean isValid(){
         Date hoje = new Date();

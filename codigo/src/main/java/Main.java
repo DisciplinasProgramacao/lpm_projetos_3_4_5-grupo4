@@ -15,7 +15,7 @@ public class Main {
         Filme f2 = new Filme("filme 2", "genero 2", "en", 100, new Date());
         c1.listaParaVer.add(s);
         c1.listaParaVer.add(f2);
-        c1.listaJaVistas.add(f);
+        c1.listaJaVistas.add(new ItemListaJaVista(f));
         allClients.add(c1);
         allClients.add(c2);
 
