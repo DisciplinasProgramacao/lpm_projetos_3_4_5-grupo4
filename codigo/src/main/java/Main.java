@@ -15,7 +15,7 @@ public class Main {
         Filme f2 = new Filme("filme 2", "genero 2", "en", 100, new Date());
         c1.listaParaVer.add(s);
         c1.listaParaVer.add(f2);
-        c1.listaJaVistas.add(f);
+        c1.listaJaVistas.add(new ItemListaJaVista(f));
         allClients.add(c1);
         allClients.add(c2);
 
@@ -56,5 +56,23 @@ public class Main {
         System.out.println("filtrar -> genero romance: " + ps.filtrar(new CompareGenero(), modelFilme));
         // FIXME erro de tipo
 //        System.out.println("filtrar -> qtd eps 10: " + ps.filtrar(new CompareQtdEpisodios(), new Serie("serie", "Romance", "en", 10)));
+
+        // Interface para usuário digitar atributos da série
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Digite o nome da série: ");
+        String nome = scanner.nextLine();
+
+        System.out.print("Digite o gênero da série: ");
+        String genero = scanner.nextLine();
+
+        System.out.print("Digite o idioma da série: ");
+        String idioma = scanner.nextLine();
+
+        System.out.print("Digite a quantidade de episódios da série: ");
+        Integer quantidadeEpisodios = scanner.nextInt();
+
+        Serie novaSerie = new Serie(nome, genero, idioma, quantidadeEpisodios);
+
     }
 }

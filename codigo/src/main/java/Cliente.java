@@ -1,17 +1,19 @@
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import static java.util.Objects.nonNull;
 
 public class Cliente implements Serializable {
     private String nomeUsuario;
     private String senha;
     List<Media> listaParaVer;
-    List<Media> listaJaVistas;
+    List<ItemListaJaVista> listaJaVistas;
+
+    Especialista tipoCliente = null;
 
     public String getNomeUsuario() {
         return nomeUsuario;
@@ -26,7 +28,11 @@ public class Cliente implements Serializable {
     }
 
     public List<Media> getListaJaVistas() {
-        return listaJaVistas;
+        List<Media> listaVistas  = new ArrayList<Media>();
+        for (ItemListaJaVista media : listaJaVistas) {
+            listaVistas.add(media.getMedia());
+        }
+        return listaVistas;
     }
 
     public Cliente(String nomeUsuario, String senha) {
@@ -81,10 +87,27 @@ public class Cliente implements Serializable {
      * @param media a mídia a ser registrada como vista
      */
     public void registrarAudiencia(Media media) {
-        Optional<Media> existe = listaJaVistas.stream().filter(s -> s.equals(media)).findFirst();
+        Optional<ItemListaJaVista> existe = listaJaVistas.stream().filter(s -> s.equals(media)).findFirst();
         if (existe.isEmpty()) {
             media.registrarAudiencia();
-            this.listaJaVistas.add(media);
+            Date hoje = new Date();
+            this.listaJaVistas.add(new ItemListaJaVista(media, hoje));
+        }
+    }
+
+    /**
+     * Registra a visualização de uma mídia pelo cliente.
+     * Se a mídia já foi registrada como vista pelo cliente, não faz nada.
+     *
+     * @param media a mídia a ser registrada como vista
+     * @param data a data o qual foi visto
+     */
+
+    public void registrarAudiencia(Media media, Date data) {
+        Optional<ItemListaJaVista> existe = listaJaVistas.stream().filter(s -> s.equals(media)).findFirst();
+        if (existe.isEmpty()) {
+            media.registrarAudiencia();
+            this.listaJaVistas.add(new ItemListaJaVista(media, data));
         }
     }
 
@@ -118,9 +141,42 @@ public class Cliente implements Serializable {
      * @param nota a nota atribuída à mídia pelo cliente
      */
     public void avaliar(String nomeMedia, int nota) {
-        Media media = listaJaVistas.stream().filter(s -> s.getNome().equals(nomeMedia)).findFirst().orElse(null);
+        Media media = listaJaVistas.stream().filter(s -> s.getMedia().getNome().equals(nomeMedia)).findFirst().orElse(null).getMedia();
         if (nonNull(media)) {
-            media.addAvaliacao(nota);
+            Avaliacao avaliacao = new Avaliacao(this, nota);
+            media.addAvaliacao(avaliacao);
+        }
+    }
+
+    /**
+     * Verifica se o cliente esta qualificado como especialista. True para caso tenha 5 avaliações nos ultimos 30 dias.
+     * 
+     * @return se o cliente é especialista
+     */
+    public boolean isClienteEspecialista() {
+        if (this.midiasValidasDeAvaliacao() >=5) {
+            this.tipoCliente = new Especialista();
+            return true;
+        } else {
+            this.tipoCliente = null;
+            return false;
+        }
+
+    }
+
+    /**
+     * Verifica a quantidade de avaliações que são considerada validas para qualificação de especialista
+     * @return numero de avaliações validas
+     */
+    public int midiasValidasDeAvaliacao(){
+        return (int) listaJaVistas.stream().filter(item -> item.isValid()).count();
+    }
+
+    public void avaliarComComentario(String nomeMedia, int nota, String comentario) {
+        if (isClienteEspecialista()) {
+            this.tipoCliente.avaliarComComentario(nomeMedia, nota, comentario, this);
+        } else {
+            System.err.println("Voce deve ser cliente especialista para escrever comentario");
         }
     }
 

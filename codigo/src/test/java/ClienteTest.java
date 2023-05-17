@@ -2,6 +2,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Date;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -93,10 +94,48 @@ public class ClienteTest {
     }
 
     @Test
-    void avaliarMedia() {
-        cliente.listaJaVistas.add(serie1);
-        cliente.avaliar(serie1.getNome(), 5);
-        assertTrue(serie1.getAvaliacoes().contains(5));
+    public void testAvaliar() {
+        cliente.listaJaVistas.add(new ItemListaJaVista(serie1));
+        cliente.avaliar("Calcinha Preta Documentário", 4);
+
+        assertEquals(1, serie1.getAvaliacoes().size());
+        assertEquals(4, serie1.getAvaliacoes().get(0).nota);
+    }
+
+    @Test
+    public void testIsClienteEspecialista() {
+        Filme f = new Filme("filme 1", "genero 1", "pt", 10, new Date());
+        Filme f2 = new Filme("filme 2", "genero 2", "en", 100, new Date());
+        Filme f3 = new Filme("filme 3", "genero 2", "en", 100, new Date());
+        Filme f4 = new Filme("filme 4", "genero 2", "en", 100, new Date());
+        Filme f5 = new Filme("filme 5", "genero 2", "en", 100, new Date());
+        for (Filme filme : List.of(f,f2,f3,f4,f5)) {
+            cliente.registrarAudiencia(filme);
+        }
+        boolean resultado = cliente.isClienteEspecialista();
+        assertTrue(resultado);
+    }
+
+    @Test
+    public void testAvaliarComComentario() {
+        Filme f = new Filme("filme 1", "genero 1", "pt", 10, new Date());
+        Filme f2 = new Filme("filme 2", "genero 2", "en", 100, new Date());
+        Filme f3 = new Filme("filme 3", "genero 2", "en", 100, new Date());
+        Filme f4 = new Filme("filme 4", "genero 2", "en", 100, new Date());
+        Filme f5 = new Filme("filme 5", "genero 2", "en", 100, new Date());
+
+        for (Filme filme : List.of(f,f2,f3,f4,f5)) {
+            cliente.registrarAudiencia(filme);
+        }
+
+        cliente.avaliarComComentario("filme 1", 5, "Ótimo filme!");
+
+        Media media = cliente.listaJaVistas.stream()
+                .filter(s -> s.getMedia().getNome().equals("filme 1"))
+                .findFirst()
+                .orElse(null).getMedia();
+        assertEquals(1, media.getAvaliacoes().size());
+        assertEquals("Ótimo filme!", media.getAvaliacoes().get(0).comentario);
     }
 
     @Test
