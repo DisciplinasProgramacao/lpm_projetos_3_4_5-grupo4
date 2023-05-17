@@ -12,6 +12,7 @@ public class Cliente implements Serializable {
     private String senha;
     List<Media> listaParaVer;
     List<Media> listaJaVistas;
+    Especialista tipoCliente = null;
 
     public String getNomeUsuario() {
         return nomeUsuario;
@@ -120,7 +121,27 @@ public class Cliente implements Serializable {
     public void avaliar(String nomeMedia, int nota) {
         Media media = listaJaVistas.stream().filter(s -> s.getNome().equals(nomeMedia)).findFirst().orElse(null);
         if (nonNull(media)) {
-            media.addAvaliacao(nota);
+            Avaliacao avaliacao = new Avaliacao(this, nota);
+            media.addAvaliacao(avaliacao);
+        }
+    }
+
+    public boolean isClienteEspecialista() {
+        if (listaJaVistas.size() >=5) {
+            this.tipoCliente = new Especialista();
+            return true;
+        } else {
+            this.tipoCliente = null;
+            return false;
+        }
+
+    }
+
+    public void avaliarComComentario(String nomeMedia, int nota, String comentario) {
+        if (isClienteEspecialista()) {
+            this.tipoCliente.avaliarComComentario(nomeMedia, nota, comentario, this);
+        } else {
+            System.err.println("Voce deve ser cliente especialista para escrever comentario");
         }
     }
 

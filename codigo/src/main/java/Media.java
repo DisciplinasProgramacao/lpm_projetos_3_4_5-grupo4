@@ -5,13 +5,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
+
 public abstract class Media implements Serializable {
     private static String[] GENEROS = { "Ação", "Comédia", "Romance" };
     protected String nome;
     protected String genero;
     protected String idioma;
     protected Integer audiencia;
-    protected List<Integer> avaliacoes;
+    protected List<Avaliacao> avaliacoes;
 
     private Integer id;
 
@@ -98,7 +101,7 @@ public abstract class Media implements Serializable {
      *
      * @return a lista de avaliações da mídia
      */
-    public List<Integer> getAvaliacoes() {
+    public List<Avaliacao> getAvaliacoes() {
         return avaliacoes;
     }
 
@@ -107,8 +110,11 @@ public abstract class Media implements Serializable {
      *
      * @param avaliacao a avaliação a ser adicionada
      */
-    public void addAvaliacao(Integer avaliacao) {
-        this.avaliacoes.add(avaliacao);
+    public void addAvaliacao(Avaliacao avaliacao) {
+        Avaliacao clienteJaAvaliou = avaliacoes.stream().filter(a -> a.getCliente().getNomeUsuario().equals(avaliacao.getCliente().getNomeUsuario())).findFirst().orElse(null);
+        if (isNull(clienteJaAvaliou)) {
+            this.avaliacoes.add(avaliacao);
+        }
     }
 
     /**
