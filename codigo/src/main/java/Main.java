@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 
 public class Main {
 
@@ -10,8 +11,8 @@ public class Main {
         Cliente c1 = new Cliente("fernando", "123");
         Cliente c2 = new Cliente("joao", "1234");
         Serie s = new Serie("serie 1", "genero 1", "pt", 10);
-        Filme f = new Filme("filme 1", "genero 1", "pt", 10, new Date(), 123);
-        Filme f2 = new Filme("filme 2", "genero 2", "en", 100, new Date(), 12345);
+        Filme f = new Filme("filme 1", "genero 1", "pt", 10, new Date());
+        Filme f2 = new Filme("filme 2", "genero 2", "en", 100, new Date());
         c1.listaParaVer.add(s);
         c1.listaParaVer.add(f2);
         c1.listaJaVistas.add(f);
@@ -22,6 +23,22 @@ public class Main {
         Filme.salvarTodosFilmes(List.of(f,f2));
         Serie.salvarTodasSeries(List.of(s));
 
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Seja bem-vindo ao cadastro de Filmes!");
+        System.out.println("Digite o Nome do filme:");
+        String nomeFilme = sc.next();
+        System.out.println("Digite a data de lancamento do filme:");
+        String dataLancamentoFilme = sc.next();
+        System.out.println("Digite a duracao do filme:");
+        Integer duracaoFilme = sc.nextInt();
+        System.out.println("Digite o genero do filme:");
+        String generoFilme = sc.next();
+        System.out.println("Digite o idioma do filme:");
+        String idiomaFilme = sc.next();
+
+        Filme fTesteRetorno = new Filme(nomeFilme, generoFilme, idiomaFilme, duracaoFilme, new Date());
+
+        System.out.println(fTesteRetorno.geraDadosFilme());
 
         List<Cliente> clientesLoaded = Cliente.carregarTodosClientes();
         List<Filme> filmesLoaded = Filme.carregarTodosFilmes();
@@ -34,7 +51,7 @@ public class Main {
         filmesLoaded.forEach(ps::adicionarMidia);
         seriesLoaded.forEach(ps::adicionarMidia);
 
-        Filme modelFilme = new Filme("filme", "Romance", "en", 100, new Date(), 124);
+        Filme modelFilme = new Filme("filme", "Romance", "en", 100, new Date());
         System.out.println("filtrar -> idioma en: " + ps.filtrar(new CompareIdioma(), modelFilme));
         System.out.println("filtrar -> genero romance: " + ps.filtrar(new CompareGenero(), modelFilme));
         // FIXME erro de tipo

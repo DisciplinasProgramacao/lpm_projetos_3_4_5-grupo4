@@ -11,11 +11,10 @@ public class Filme extends Media implements Serializable {
     private Date dataLancamento;
     private Integer id;
 
-    public Filme(String nome, String genero, String idioma, Integer duracao, Date dataLancamento, Integer id) {
+    public Filme(String nome, String genero, String idioma, Integer duracao, Date dataLancamento) {
         super(nome, genero, idioma);
         this.dataLancamento = dataLancamento;
         this.duracao = duracao;
-        this.id = id;
     }
 
     public Filme(String[] dadosLidos) {
@@ -76,7 +75,7 @@ public class Filme extends Media implements Serializable {
      * @return Uma string contendo os dados do filme no formato "id;nome;dataLancamento;duração;genero;idioma".
      */
     public String geraDadosFilme(){
-        int idFilme = gerarId();
+        int idFilme = getId();
         String nomeFilme = getNome();
         SimpleDateFormat sf = new SimpleDateFormat("dd/MM/yyyy");
         String dataLancamentoFilme = sf.format(getDataLancamento());
