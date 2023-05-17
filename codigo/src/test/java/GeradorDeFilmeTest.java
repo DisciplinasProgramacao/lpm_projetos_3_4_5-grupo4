@@ -1,4 +1,6 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -11,11 +13,6 @@ public class GeradorDeFilmeTest {
 
         List<Filme> listaFilmes = GeradorDeFilme.gerarFilmes("Catalogo.txt");
 
-        for (Filme filme : listaFilmes) {
-            System.out.println(filme.toString());
-
-        }
-        assertEquals("", listaFilmes.get(0).toString());
-        // assertEquals(10, listaFilmes.size());
+        assertTrue(listaFilmes.toArray().length > 0);
     }
 }

@@ -19,7 +19,6 @@ public class FilmeTest {
         filme = new Filme("Filme Teste", "Ação", "Português", 120, new Date());
     }
 
-
     @Test
     public void testGetDuracaoSegundos() {
         Integer duracaoSegundos = filme.getDuracaoSegundos();
@@ -58,4 +57,20 @@ public class FilmeTest {
         new File("filmes.dat").delete();
     }
 
+    @Test
+    public void testaMediaDeAvaliacoes() throws IOException, ClassNotFoundException {
+        Cliente cliente1 = new Cliente("Nilocan2022", "sabhsjabjhbsajh");
+        Cliente cliente2 = new Cliente("Felipe Melo", "ssssaa");
+        Cliente cliente3 = new Cliente("Luva", "popyedoskank");
+
+        Avaliacao avaliacao1 = new Avaliacao(cliente1, 3);
+        Avaliacao avaliacao2 = new Avaliacao(cliente2, 4);
+        Avaliacao avaliacao3 = new Avaliacao(cliente3, 5);
+
+        filme.addAvaliacao(avaliacao1);
+        filme.addAvaliacao(avaliacao2);
+        filme.addAvaliacao(avaliacao3);
+
+        assertEquals(4, filme.mediaDeAvaliacoes());
+    }
 }

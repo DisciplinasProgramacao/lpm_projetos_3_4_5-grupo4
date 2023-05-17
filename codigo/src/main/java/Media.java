@@ -134,4 +134,9 @@ public abstract class Media implements Serializable {
     public void setId(Integer id) {
         this.id = id;
     }
+
+    public double mediaDeAvaliacoes(){
+        double mediaDeAvaliacoes = avaliacoes.stream().mapToInt(avaliacao -> avaliacao.nota).average().orElse(0d);
+        return mediaDeAvaliacoes;
+    }
 }
