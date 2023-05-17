@@ -3,7 +3,6 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,7 +14,6 @@ public class FilmeTest {
     Filme filme;
     @BeforeEach
     void setUp(){
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         filme = new Filme("Filme Teste", "Ação", "Português", 120, new Date());
     }
 
