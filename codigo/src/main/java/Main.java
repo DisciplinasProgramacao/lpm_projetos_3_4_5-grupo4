@@ -23,6 +23,22 @@ public class Main {
         Filme.salvarTodosFilmes(List.of(f,f2));
         Serie.salvarTodasSeries(List.of(s));
 
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Seja bem-vindo ao cadastro de Filmes!");
+        System.out.println("Digite o Nome do filme:");
+        String nomeFilme = sc.next();
+        System.out.println("Digite a data de lancamento do filme:");
+        String dataLancamentoFilme = sc.next();
+        System.out.println("Digite a duracao do filme:");
+        Integer duracaoFilme = sc.nextInt();
+        System.out.println("Digite o genero do filme:");
+        String generoFilme = sc.next();
+        System.out.println("Digite o idioma do filme:");
+        String idiomaFilme = sc.next();
+
+        Filme fTesteRetorno = new Filme(nomeFilme, generoFilme, idiomaFilme, duracaoFilme, new Date());
+
+        System.out.println(fTesteRetorno.geraDadosFilme());
 
         List<Cliente> clientesLoaded = Cliente.carregarTodosClientes();
         List<Filme> filmesLoaded = Filme.carregarTodosFilmes();

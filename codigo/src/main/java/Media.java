@@ -18,6 +18,8 @@ public abstract class Media implements Serializable {
 
     private Integer id;
 
+    private Integer id;
+
     /**
      * Construtor da classe Media.
      *
@@ -36,6 +38,7 @@ public abstract class Media implements Serializable {
         this.idioma = idioma;
         audiencia = 0;
         avaliacoes = new ArrayList<>();
+        this.id = gerarId();
     }
 
     /**
@@ -72,6 +75,15 @@ public abstract class Media implements Serializable {
      */
     public Integer getAudiencia() {
         return audiencia;
+    }
+
+    /**
+     * Retorna o id da media.
+     *
+     * @return id da mídia
+     */
+    public Integer getId(){
+        return id;
     }
 
     /**
