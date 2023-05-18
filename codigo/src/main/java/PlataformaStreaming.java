@@ -58,8 +58,39 @@ public class PlataformaStreaming {
      * @param model o modelo usado para filtrar as mídias
      * @return a lista de mídias filtradas
      */
-    public List<Media> filtrar(Comparator<Media> comparator, Media model) {
+    private List<Media> filtrar(Comparator<Media> comparator, Media model) {
         return midias.stream().filter((media -> comparator.compare(media, model) == 0)).collect(Collectors.toList());
+    }
+
+    /**
+     * @param comparator Comparator a ser utilizado para filtrar
+     * @param model Media modelo com o genero que deseja filtrar
+     * @return Lista de Medias com o mesmo genero de model
+     */
+    public List<Media> filtrarPorGenero(Comparator<Media> comparator, Media model) {
+        return filtrar(comparator, model);
+    }
+
+    /**
+     * @param comparator Comparator a ser utilizado para filtrar
+     * @param model Media modelo com o idioma que deseja filtrar
+     * @return Lista de Medias com o mesmo idioma de model
+     */
+    public List<Media> filtrarPorIdioma(Comparator<Media> comparator, Media model) {
+        return filtrar(comparator, model);
+    }
+
+    /**
+     * @param comparator Comparator a ser utilizado para filtrar
+     * @param model Serie modelo com a quantidade de episódios que deseja filtrar
+     * @return Lista de Series com a mesma quantidade de episódios de model
+     */
+    public List<Media> filtrarPorQtdEpisodios(Comparator<Serie> comparator, Serie model) {
+        return midias.stream().filter((media -> {
+            if (media instanceof Serie)
+                return comparator.compare((Serie) media, model) == 0;
+            return false;
+        })).collect(Collectors.toList());
     }
 
     /**

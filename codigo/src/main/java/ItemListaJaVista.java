@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.util.Date;
 
-public class ItemListaJaVista {
+public class ItemListaJaVista implements Serializable {
     
     private Media listaJaVistas;
     private Date dataVizualizacao;

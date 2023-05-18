@@ -36,10 +36,9 @@ public class Main {
         seriesLoaded.forEach(ps::adicionarMidia);
 
         Filme modelFilme = new Filme("filme", "Romance", "en", 100, new Date());
-        System.out.println("filtrar -> idioma en: " + ps.filtrar(new CompareIdioma(), modelFilme));
-        System.out.println("filtrar -> genero romance: " + ps.filtrar(new CompareGenero(), modelFilme));
-        // FIXME erro de tipo
-//        System.out.println("filtrar -> qtd eps 10: " + ps.filtrar(new CompareQtdEpisodios(), new Serie("serie", "Romance", "en", 10)));
+        System.out.println("filtrar -> idioma en: " + ps.filtrarPorIdioma(new CompareIdioma(), modelFilme));
+        System.out.println("filtrar -> genero romance: " + ps.filtrarPorGenero(new CompareGenero(), modelFilme));
+        System.out.println("filtrar -> qtd eps 10: " + ps.filtrarPorQtdEpisodios(new CompareQtdEpisodios(), new Serie("serie", "Romance", "en", 10)));
 
         // Interface para usuário digitar atributos da série
         Scanner scanner = new Scanner(System.in);
