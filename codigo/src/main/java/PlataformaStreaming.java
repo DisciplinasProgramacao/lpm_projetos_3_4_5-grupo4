@@ -15,8 +15,12 @@ public class PlataformaStreaming {
     public PlataformaStreaming(String nome) {
         this.nome = nome;
         midias = new HashSet<>();
-        clientes = new ArrayList<>();
         clienteAtual = null;
+        try {
+            clientes = Cliente.carregarTodosClientes();
+        } catch (Exception e) {
+            clientes = new ArrayList<>();
+        }
     }
 
     /**
@@ -128,9 +132,5 @@ public class PlataformaStreaming {
      */
     public void logoff() {
         clienteAtual = null;
-    }
-
-    public void setClientes(List<Cliente> clientes) {
-        this.clientes = clientes;
     }
 }

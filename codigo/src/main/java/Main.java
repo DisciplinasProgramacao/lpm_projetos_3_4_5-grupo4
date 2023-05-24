@@ -11,7 +11,6 @@ public class Main {
     public static void main(String[] args) throws ClassNotFoundException, IOException {
         sc = new Scanner(System.in);
         PlataformaStreaming ps = new PlataformaStreaming("Metflix");
-        ps.setClientes(Cliente.carregarTodosClientes());
 
         System.out.println("\nBem-vindo(a) à Metflix");
         printDivider();
