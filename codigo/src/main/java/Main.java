@@ -1,61 +1,151 @@
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Scanner;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import static java.util.Objects.isNull;
 
 public class Main {
 
+    private static Scanner sc;
+
     public static void main(String[] args) throws IOException, ClassNotFoundException, IOException {
-        List<Cliente> allClients = new ArrayList<>();
-        Cliente c1 = new Cliente("fernando", "123");
-        Cliente c2 = new Cliente("joao", "1234");
-        Serie s = new Serie("serie 1", "genero 1", "pt", 10);
-        Filme f = new Filme("filme 1", "genero 1", "pt", 10, new Date());
-        Filme f2 = new Filme("filme 2", "genero 2", "en", 100, new Date());
-        c1.listaParaVer.add(s);
-        c1.listaParaVer.add(f2);
-        c1.listaJaVistas.add(new ItemListaJaVista(f));
-        allClients.add(c1);
-        allClients.add(c2);
+        PlataformaStreaming ps = new PlataformaStreaming("Metflix");
 
-        Cliente.salvarTodosClientes(allClients);
-        Filme.salvarTodosFilmes(List.of(f,f2));
-        Serie.salvarTodasSeries(List.of(s));
+        sc = new Scanner(System.in);
+        int op;
 
+        while (true) {
+            System.out.println("\nEscolha uma operação:");
+            printDivider();
+            System.out.println("1 - Cadastrar");
+            System.out.println("2 - Listar");
+            System.out.println("3 - Filtrar");
+            System.out.println("4 - Assistir");
+            System.out.println("5 - Adicionar a sua Lista para Ver");
+            System.out.println("6 - Avaliar");
+            System.out.println("7 - Avaliar e Comentar");
+            System.out.println("0 - Sair");
+            printDivider();
 
-        List<Cliente> clientesLoaded = Cliente.carregarTodosClientes();
-        List<Filme> filmesLoaded = Filme.carregarTodosFilmes();
-        List<Serie> seriesLoaded = Serie.carregarTodasSeries();
-        System.out.println(clientesLoaded);
-        System.out.println(filmesLoaded);
-        System.out.println(seriesLoaded);
+            System.out.print("Operação: ");
+            op = sc.nextInt();
+            sc.nextLine();
 
-        PlataformaStreaming ps = new PlataformaStreaming("Netflix");
-        filmesLoaded.forEach(ps::adicionarMidia);
-        seriesLoaded.forEach(ps::adicionarMidia);
+            if (op == 0) break;
+            switch (op) {
+                case 1:
+                    Media media = handleCadastrar();
+                    if (!isNull(media)) {
+                        ps.adicionarMidia(media);
+                        System.out.println("Mídia cadastrada com sucesso");
+                    }
+                    break;
+                case 2:
+                    handleListar();
+                    break;
+                case 3:
+                    handleFiltrar();
+                    break;
+                case 4:
+                    handleAssistir();
+                    break;
+                case 5:
+                    handleWatchlist();
+                    break;
+                case 6:
+                    handleAvaliar();
+                    break;
+                case 7:
+                    handleAvaliarComentar();
+                    break;
+                default:
+                    System.out.println("Opção inválida. Tente novamente\n");
+            }
 
-        Filme modelFilme = new Filme("filme", "Romance", "en", 100, new Date());
-        System.out.println("filtrar -> idioma en: " + ps.filtrarPorIdioma(new CompareIdioma(), modelFilme));
-        System.out.println("filtrar -> genero romance: " + ps.filtrarPorGenero(new CompareGenero(), modelFilme));
-        System.out.println("filtrar -> qtd eps 10: " + ps.filtrarPorQtdEpisodios(new CompareQtdEpisodios(), new Serie("serie", "Romance", "en", 10)));
+        }
 
-        // Interface para usuário digitar atributos da série
-        Scanner scanner = new Scanner(System.in);
+        sc.close();
+    }
 
-        System.out.print("Digite o nome da série: ");
-        String nome = scanner.nextLine();
+    private static Media handleCadastrar() {
+        int op = handleFilmeOuSerie("Cadastrar ");
+        if (op == 1) {
+            System.out.println("Informe os dados do filme:");
+            System.out.print("Nome: ");
+            String nome = sc.nextLine();
+            System.out.print("Gênero: ");
+            String genero = sc.nextLine();
+            System.out.print("Idioma: ");
+            String idioma = sc.nextLine();
+            System.out.print("Duração (min): ");
+            int duracao = sc.nextInt();
+            sc.nextLine();
+            Date date;
+            while (true) {
+                System.out.print("Data Lançamento (dd/mm/aaaa): ");
+                String dateStr = sc.nextLine();
+                System.out.println("str: " + dateStr);
+                try {
+                    date = new SimpleDateFormat("dd/MM/yyyy").parse(dateStr);
+                    break;
+                } catch (ParseException e) {
+                    System.out.println("Formato de data inválido. Tente novamente");
+                }
+            }
 
-        System.out.print("Digite o gênero da série: ");
-        String genero = scanner.nextLine();
+            return new Filme(nome, genero, idioma, duracao, date);
+        } else if (op == 2) {
+            System.out.println("Informe os dados da série:");
+            System.out.print("Nome: ");
+            String nome = sc.nextLine();
+            System.out.print("Gênero: ");
+            String genero = sc.nextLine();
+            System.out.print("Idioma: ");
+            String idioma = sc.nextLine();
+            System.out.print("Quantos episódios? ");
+            Serie serie;
+            while (true) {
+                try {
+                    int episiodios = sc.nextInt();
+                    sc.nextLine();
+                    serie = new Serie(nome, genero, idioma, episiodios);
+                    break;
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+            }
 
-        System.out.print("Digite o idioma da série: ");
-        String idioma = scanner.nextLine();
+            return serie;
+        }
 
-        System.out.print("Digite a quantidade de episódios da série: ");
-        Integer quantidadeEpisodios = scanner.nextInt();
+        return null;
+    }
 
-        Serie novaSerie = new Serie(nome, genero, idioma, quantidadeEpisodios);
+    private static void handleListar() {}
 
+    private static void handleFiltrar() {}
+
+    private static void handleAssistir() {}
+
+    private static void handleWatchlist() {}
+
+    private static void handleAvaliar() {}
+
+    private static void handleAvaliarComentar() {}
+
+    private static int handleFilmeOuSerie(String prefix) {
+        System.out.println(prefix + "Filme ou Série?");
+        System.out.println("1 - Filme");
+        System.out.println("2 - Série");
+        System.out.print("Opção: ");
+        int op = sc.nextInt();
+        sc.nextLine();
+        if (op == 1 || op == 2) return op;
+
+        return handleFilmeOuSerie(prefix);
+    }
+
+    private static void printDivider() {
+        System.out.println("------------------------------");
     }
 }

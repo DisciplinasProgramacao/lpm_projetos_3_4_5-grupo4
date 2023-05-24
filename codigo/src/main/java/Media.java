@@ -9,7 +9,7 @@ import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 public abstract class Media implements Serializable {
-    private static String[] GENEROS = { "Ação", "Comédia", "Romance" };
+    private static final String[] GENEROS = { "Ação", "Comédia", "Romance" };
     protected String nome;
     protected String genero;
     protected String idioma;
@@ -36,6 +36,7 @@ public abstract class Media implements Serializable {
         this.idioma = idioma;
         audiencia = 0;
         avaliacoes = new ArrayList<>();
+        id = gerarId();
     }
 
     /**
