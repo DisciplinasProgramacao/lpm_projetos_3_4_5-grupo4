@@ -1,13 +1,11 @@
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.io.IOException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class PlataformaStreaming {
     private String nome;
     private HashSet<Media> midias;
-    private HashSet<Cliente> clientes;
+    private List<Cliente> clientes;
     private Cliente clienteAtual;
 
     /**
@@ -17,7 +15,7 @@ public class PlataformaStreaming {
     public PlataformaStreaming(String nome) {
         this.nome = nome;
         midias = new HashSet<>();
-        clientes = new HashSet<>();
+        clientes = new ArrayList<>();
         clienteAtual = null;
     }
 
@@ -47,9 +45,18 @@ public class PlataformaStreaming {
      * Adiciona um novo cliente à plataforma de streaming.
      * @param cliente o cliente a ser adicionado
      */
-    public void adicionarCliente(Cliente cliente) {
-        if (cliente == null) return;
+    public boolean adicionarCliente(Cliente cliente) {
+        if (cliente == null) return false;
+        if (clientes.stream().anyMatch(c -> c.getNomeUsuario().equals(cliente.getNomeUsuario()))) return false;
+
         clientes.add(cliente);
+        try {
+            Cliente.salvarTodosClientes(clientes);
+        } catch (IOException e) {
+            System.out.println("Erro ao salvar clientes: " + e.getMessage());
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -110,7 +117,10 @@ public class PlataformaStreaming {
      */
     public void registrarAudiencia(String nomeMidia) {
         Media midia = buscarMidia(nomeMidia);
-        if (midia != null) midia.registrarAudiencia();
+        if (midia != null) {
+            midia.registrarAudiencia();
+            clienteAtual.registrarAudiencia(midia);
+        }
     }
 
     /**
@@ -118,5 +128,9 @@ public class PlataformaStreaming {
      */
     public void logoff() {
         clienteAtual = null;
+    }
+
+    public void setClientes(List<Cliente> clientes) {
+        this.clientes = clientes;
     }
 }
