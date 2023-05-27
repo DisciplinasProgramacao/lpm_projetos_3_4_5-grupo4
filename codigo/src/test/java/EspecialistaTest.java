@@ -19,7 +19,7 @@ public class EspecialistaTest {
 
     @BeforeAll
     void init() throws IOException{
-        filmes = GeradorDeFilme.gerarFilmes("Catalogo.txt");
+        filmes = GeradorDeFilme.gerarFilmes("data/Filmes.csv");
         cliente = new Cliente("User", "Senha");
     }
     

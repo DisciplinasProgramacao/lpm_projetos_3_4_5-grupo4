@@ -38,8 +38,8 @@ class SerieTest {
     public void salvarTodasSeries() throws IOException {
         serie = new Serie("a volta dos que não foram", "comédia", "pt-br", 3);
         Serie.salvarTodasSeries(List.of(serie));
-        assertTrue(new File("series.dat").exists());
-        new File("series.dat").delete();
+        assertTrue(new File("data/series.dat").exists());
+        new File("data/series.dat").delete();
     }
 
     @Test
@@ -48,6 +48,6 @@ class SerieTest {
         Serie.salvarTodasSeries(List.of(serie));
         List<Serie> seriesCarregadas = Serie.carregarTodasSeries();
         assertEquals(seriesCarregadas.toString(), List.of(serie).toString());
-        new File("series.dat").delete();
+        new File("data/series.dat").delete();
     }
 }

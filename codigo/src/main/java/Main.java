@@ -1,18 +1,19 @@
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Scanner;
 import static java.util.Objects.isNull;
 
 public class Main {
 
     private static Scanner sc;
 
-    public static void main(String[] args) throws ClassNotFoundException, IOException {
+    public static void main(String[] args) {
         sc = new Scanner(System.in);
-        PlataformaStreaming ps = new PlataformaStreaming("Metflix");
+        PlataformaStreaming ps = new PlataformaStreaming("Xulambs Video");
 
-        System.out.println("\nBem-vindo(a) à Metflix");
+        System.out.println("\nBem-vindo(a) à " + ps.getNome());
         printDivider();
 
         Cliente cliente = handleLogin(ps);
@@ -32,7 +33,7 @@ public class Main {
             System.out.println("5 - Avaliar");
             System.out.println("6 - Avaliar e Comentar");
             System.out.println("7 - Logoff");
-            System.out.println("0 - Sair da Metflix");
+            System.out.println("0 - Sair da " + ps.getNome());
             printDivider();
 
             System.out.print("Operação: ");
