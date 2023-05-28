@@ -3,23 +3,20 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.io.IOException;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-
-import javax.xml.crypto.Data;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 public class EspecialistaTest {
-    List<Filme> filmes;
-    Cliente cliente;
+    static List<Filme> filmes;
+    static Cliente cliente;
 
 
     @BeforeAll
-    void init() throws IOException{
-        filmes = GeradorDeFilme.gerarFilmes("data/Filmes.csv");
+    static void init() throws IOException{
+        filmes = GeradorDeMedia.gerarFilmes("data/Filmes.csv");
         cliente = new Cliente("User", "Senha");
     }
     

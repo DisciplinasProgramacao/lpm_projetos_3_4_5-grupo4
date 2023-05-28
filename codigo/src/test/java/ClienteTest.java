@@ -17,8 +17,8 @@ public class ClienteTest {
     @BeforeEach
     void setUp() {
         cliente = new Cliente("Nilocan2022", "sabhsjabjhbsajh");
-        serie1 = new Serie("Calcinha Preta Documentário", "Ação", "catalão", 11);
-        serie2 = new Serie("Quebrando camas", "Comédia", "russo", 13);
+        serie1 = new Serie("Calcinha Preta Documentário", "Ação", "catalão", new Date(), 11);
+        serie2 = new Serie("Quebrando camas", "Comédia", "russo", new Date(), 13);
     }
 
     @Test

@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-public class GeradorDeFilmeTest {
+public class GeradorDeMediaTest {
 
     /**
      * Teste de carregamento do arquivo data/Filmes.csv
@@ -16,7 +16,7 @@ public class GeradorDeFilmeTest {
     @Test
     void testeCarregamento() throws IOException {
 
-        List<Filme> listaFilmes = GeradorDeFilme.gerarFilmes("data/Filmes.csv");
+        List<Filme> listaFilmes = GeradorDeMedia.gerarFilmes("data/Filmes.csv");
 
         assertTrue(listaFilmes.toArray().length > 0);
     }

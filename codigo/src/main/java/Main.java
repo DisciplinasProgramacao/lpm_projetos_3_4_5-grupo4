@@ -161,7 +161,7 @@ public class Main {
                 try {
                     int episiodios = sc.nextInt();
                     sc.nextLine();
-                    serie = new Serie(nome, genero, idioma, episiodios);
+                    serie = new Serie(nome, genero, idioma, new Date(), episiodios);
                     break;
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
@@ -187,16 +187,16 @@ public class Main {
             case 1:
                 System.out.print("Qual gênero deseja filtrar? ");
                 String genero = sc.nextLine();
-                return ps.filtrarPorGenero(new CompareGenero(), new Serie("model", genero, "en", 5));
+                return ps.filtrarPorGenero(new CompareGenero(), new Serie("model", genero, "en", new Date(), 5));
             case 2:
                 System.out.print("Qual idioma deseja filtrar? ");
                 String idioma = sc.nextLine();
-                return ps.filtrarPorIdioma(new CompareIdioma(), new Serie("model", "Romance", idioma, 5));
+                return ps.filtrarPorIdioma(new CompareIdioma(), new Serie("model", "Romance", idioma, new Date(), 5));
             case 3:
                 System.out.print("Filtrar séries com quantos episódios? ");
                 int eps = sc.nextInt();
                 sc.nextLine();
-                return ps.filtrarPorQtdEpisodios(new CompareQtdEpisodios(), new Serie("model", "Romance", "en", eps));
+                return ps.filtrarPorQtdEpisodios(new CompareQtdEpisodios(), new Serie("model", "Romance", "en", new Date(), eps));
             default:
                 System.out.println("Opção inválida. Tente novamente");
                 return handleFiltrar(ps);

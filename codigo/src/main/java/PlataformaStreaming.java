@@ -4,7 +4,7 @@ import java.util.stream.Collectors;
 
 public class PlataformaStreaming {
     private String nome;
-    private HashSet<Media> midias;
+    private List<Media> midias;
     private List<Cliente> clientes;
     private Cliente clienteAtual;
 
@@ -14,8 +14,12 @@ public class PlataformaStreaming {
      */
     public PlataformaStreaming(String nome) {
         this.nome = nome;
-        midias = new HashSet<>();
         clienteAtual = null;
+        try {
+//            midias = ;
+        } catch (Exception e) {
+            midias = new ArrayList<>();
+        }
         try {
             clientes = Cliente.carregarTodosClientes();
         } catch (Exception e) {

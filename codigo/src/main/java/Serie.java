@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 public class Serie extends Media implements Serializable {
@@ -11,15 +12,39 @@ public class Serie extends Media implements Serializable {
      * @param nome               o nome da série
      * @param genero             o gênero da série
      * @param idioma             o idioma da série
+     * @param dataLancamento     a data de lançamento da série
      * @param quantidadeEpisodios a quantidade de episódios da série
      * @throws Error se a quantidade de episódios for menor que 2
      */
-    public Serie(String nome, String genero, String idioma, Integer quantidadeEpisodios) {
-        super(nome, genero, idioma);
+    public Serie(String nome, String genero, String idioma, Date dataLancamento, Integer quantidadeEpisodios) {
+        super(nome, genero, idioma, dataLancamento);
         if (quantidadeEpisodios < 2) {
             throw new Error("Precisa ter no mínimo 2 episódios");
         }
         this.quantidadeEpisodios = quantidadeEpisodios;
+    }
+
+    /**
+     * Construtor da classe Serie.
+     *
+     * @param id                 o id da série
+     * @param nome               o nome da série
+     * @param genero             o gênero da série
+     * @param idioma             o idioma da série
+     * @param dataLancamento     a data de lançamento da série
+     * @param quantidadeEpisodios a quantidade de episódios da série
+     * @throws Error se a quantidade de episódios for menor que 2
+     */
+    public Serie(Integer id, String nome, String genero, String idioma, Date dataLancamento, Integer quantidadeEpisodios) {
+        super(id, nome, genero, idioma, dataLancamento);
+        if (quantidadeEpisodios < 2) {
+            throw new Error("Precisa ter no mínimo 2 episódios");
+        }
+        this.quantidadeEpisodios = quantidadeEpisodios;
+    }
+
+    public Serie(String[] dadosLidos) {
+        super(Integer.parseInt(dadosLidos[0].replaceAll("\\p{C}", "")), dadosLidos[1], "", "", new Date(dadosLidos[2]));
     }
 
     /**
@@ -39,7 +64,7 @@ public class Serie extends Media implements Serializable {
      */
     public static void salvarTodasSeries(List<Serie> allSeries) throws IOException {
         GenericDao<Serie> serieDao = new GenericDao<>();
-        serieDao.save(allSeries, "series.dat");
+        serieDao.save(allSeries, "data/series.dat");
     }
 
     /**
@@ -51,7 +76,7 @@ public class Serie extends Media implements Serializable {
      */
     public static List<Serie> carregarTodasSeries() throws IOException, ClassNotFoundException {
         GenericDao<Serie> serieDao = new GenericDao<>();
-        return serieDao.load("series.dat");
+        return serieDao.load("data/series.dat");
     }
 
     /**
