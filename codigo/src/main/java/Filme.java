@@ -40,25 +40,6 @@ public class Filme extends Media implements Serializable {
         return duracao * 60;
     }
 
-    /**
-     * Retorna uma representação em formato de string do filme.
-     *
-     * @return Uma string contendo os atributos do filme.
-     */
-    @Override
-    public String toString() {
-        return super.toString() +
-                "\nFilme{" +
-                "duracao=" + duracao +
-                ", dataLancamento=" + dataLancamento +
-                '}';
-    }
-
-    /**
-     * Retorna uma string formatada com os atributos do filme para salvar em um arquivo.
-     *
-     * @return Uma string formatada contendo os atributos do filme para salvar.
-     */
     public String StringSalvar() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -86,5 +67,18 @@ public class Filme extends Media implements Serializable {
     public static List<Filme> carregarTodosFilmes() throws IOException, ClassNotFoundException {
         GenericDao<Filme> filmeDao = new GenericDao<>();
         return filmeDao.load("data/filmes.dat");
+    }
+
+    @Override
+    public String toString() {
+        return "Filme{" +
+                "duracao=" + duracao +
+                ", id=" + id +
+                ", nome='" + nome + '\'' +
+                ", genero='" + genero + '\'' +
+                ", idioma='" + idioma + '\'' +
+                ", dataLancamento=" + dataLancamento +
+                ", audiencia=" + audiencia +
+                '}';
     }
 }

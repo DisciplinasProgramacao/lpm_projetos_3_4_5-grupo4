@@ -94,21 +94,6 @@ public abstract class Media implements Serializable {
     }
 
     /**
-     * Retorna uma representação em formato de string da mídia.
-     *
-     * @return a representação em formato de string da mídia
-     */
-    @Override
-    public String toString() {
-        return "Media{" +
-                "nome='" + nome + '\'' +
-                ", genero='" + genero + '\'' +
-                ", idioma='" + idioma + '\'' +
-                ", audiencia=" + audiencia +
-                '}';
-    }
-
-    /**
      * Retorna a lista de avaliações da mídia.
      *
      * @return a lista de avaliações da mídia
