@@ -174,9 +174,9 @@ public class Cliente implements Serializable {
     }
 
     public void avaliarComComentario(String nomeMedia, int nota, String comentario) {
-        if (isClienteEspecialista()) {
+        try {
             this.tipoCliente.avaliarComComentario(nomeMedia, nota, comentario, this);
-        } else {
+        } catch (NullPointerException e) {
             System.err.println("Voce deve ser cliente especialista para escrever comentario");
         }
     }
