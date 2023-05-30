@@ -16,6 +16,11 @@ public class ItemListaJaVista implements Serializable {
         this.dataVizualizacao = hoje;
     }
 
+    /**
+     * Verifica se o item da lista é válido, ou seja, se a data de visualização está dentro dos últimos 30 dias.
+     *
+     * @return true se o item da lista é válido, false caso contrário.
+     */
     public boolean isValid(){
         Date hoje = new Date();
         long umDiaEmMilissegundos = 24 * 60 * 60 * 1000; // Quantidade de milissegundos em um dia

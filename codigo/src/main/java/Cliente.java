@@ -173,6 +173,14 @@ public class Cliente implements Serializable {
         return (int) listaJaVistas.stream().filter(item -> item.isValid()).count();
     }
 
+    /**
+     * Avalia uma mídia com um comentário, atribuindo uma nota e associando ao cliente.
+     *
+     * @param nomeMedia  O nome da mídia a ser avaliada.
+     * @param nota       A nota atribuída à mídia.
+     * @param comentario O comentário relacionado à avaliação da mídia.
+     */
+
     public void avaliarComComentario(String nomeMedia, int nota, String comentario) {
         try {
             this.tipoCliente.avaliarComComentario(nomeMedia, nota, comentario, this);
