@@ -93,4 +93,17 @@ public class Serie extends Media implements Serializable {
 
         return dadosSerie;
     }
+
+    @Override
+    public String toString() {
+        return "Serie{" +
+                "quantidadeEpisodios=" + quantidadeEpisodios +
+                ", id=" + id +
+                ", nome='" + nome + '\'' +
+                ", genero='" + genero + '\'' +
+                ", idioma='" + idioma + '\'' +
+                ", dataLancamento=" + dataLancamento +
+                ", audiencia=" + audiencia +
+                '}';
+    }
 }

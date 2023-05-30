@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class PlataformaStreaming {
     private String nome;
@@ -16,7 +17,10 @@ public class PlataformaStreaming {
         this.nome = nome;
         clienteAtual = null;
         try {
-//            midias = ;
+            midias = Stream.concat(GeradorDeMedia.gerarFilmes(
+                    "data/Filmes.csv").stream(),
+                    GeradorDeMedia.gerarSeries("data/Series.csv").stream()
+            ).collect(Collectors.toList());
         } catch (Exception e) {
             midias = new ArrayList<>();
         }
