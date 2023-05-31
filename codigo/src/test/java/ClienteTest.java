@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,7 +27,7 @@ public class ClienteTest {
         cliente.adicionarNaLista(serie1);
         cliente.adicionarNaLista(serie2);
 
-        List<Media> listaParaVer = cliente.getListaParaVer();
+        Set<Media> listaParaVer = cliente.getListaParaVer();
 
         assertEquals(2, listaParaVer.size());
         assertTrue(listaParaVer.contains(serie1));
@@ -40,7 +41,7 @@ public class ClienteTest {
 
         cliente.retirarDaLista("Calcinha Preta Documentário");
 
-        List<Media> listaParaVer = cliente.getListaParaVer();
+        Set<Media> listaParaVer = cliente.getListaParaVer();
 
         assertEquals(1, listaParaVer.size());
         assertFalse(listaParaVer.contains(serie1));
@@ -68,17 +69,6 @@ public class ClienteTest {
         assertEquals(1, seriesFiltradas.size());
         assertTrue(seriesFiltradas.contains(serie2));
     }
-
-//    @Test
-//    void testFiltrarPorQtdeEpisodios() {
-//        cliente.adicionarNaLista(serie1);
-//        cliente.adicionarNaLista(serie2);
-//
-//        List<Serie> seriesFiltradas = cliente.filtrarPorQtdeEpisodios(11);
-//
-//        assertEquals(1, seriesFiltradas.size());
-//        assertTrue(seriesFiltradas.contains(serie1));
-//    }
 
     @Test
     void testRegistrarAudiencia() {
@@ -142,5 +132,20 @@ public class ClienteTest {
     void tentarAvaliarMediaNaoVista() {
         cliente.avaliar(serie1.getNome(), 5);
         assertFalse(serie1.getAvaliacoes().contains(5));
+    }
+
+    @Test
+    public void testMidiasValidasDeAvaliacao() {
+        Cliente cliente = new Cliente("Lob", "loblob");
+
+        Filme f1 = new Filme("filme 1", "genero 1", "pt", 10, new Date());
+        Filme f2 = new Filme("filme 2", "genero 2", "en", 100, new Date());
+
+        cliente.registrarAudiencia(f1);
+        cliente.registrarAudiencia(f2);
+
+        int midiasValidas = cliente.midiasValidasDeAvaliacao();
+
+        assertEquals(2, midiasValidas);
     }
 }
