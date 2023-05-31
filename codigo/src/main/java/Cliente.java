@@ -1,16 +1,13 @@
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import static java.util.Objects.nonNull;
 
 public class Cliente implements Serializable {
     private String nomeUsuario;
     private String senha;
-    List<Media> listaParaVer;
+    Set<Media> listaParaVer;
     List<ItemListaJaVista> listaJaVistas;
 
     Especialista tipoCliente = null;
@@ -23,7 +20,7 @@ public class Cliente implements Serializable {
         return senha;
     }
 
-    public List<Media> getListaParaVer() {
+    public Set<Media> getListaParaVer() {
         return listaParaVer;
     }
 
@@ -39,7 +36,7 @@ public class Cliente implements Serializable {
         this.nomeUsuario = nomeUsuario;
         this.senha = senha;
         this.listaJaVistas = new ArrayList<>();
-        this.listaParaVer = new ArrayList<>();
+        this.listaParaVer = new HashSet<>();
     }
 
     /**
@@ -47,8 +44,8 @@ public class Cliente implements Serializable {
      *
      * @param media a mídia a ser adicionada
      */
-    public void adicionarNaLista(Media media) {
-        listaParaVer.add(media);
+    public boolean adicionarNaLista(Media media) {
+        return listaParaVer.add(media);
     }
 
     /**
@@ -56,8 +53,8 @@ public class Cliente implements Serializable {
      *
      * @param nomeMedia o nome da mídia a ser removida
      */
-    public void retirarDaLista(String nomeMedia) {
-        listaParaVer.removeIf(l -> l.getNome().equals(nomeMedia));
+    public boolean retirarDaLista(String nomeMedia) {
+        return listaParaVer.removeIf(l -> l.getNome().equals(nomeMedia));
     }
 
     /**
@@ -179,6 +176,10 @@ public class Cliente implements Serializable {
         } catch (NullPointerException e) {
             System.err.println("Voce deve ser cliente especialista para escrever comentario");
         }
+    }
+
+    public boolean equals(Cliente cliente) {
+        return this.nomeUsuario.equals(cliente.getNomeUsuario());
     }
 
 }

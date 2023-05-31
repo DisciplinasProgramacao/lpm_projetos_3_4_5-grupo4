@@ -143,6 +143,11 @@ public class PlataformaStreaming {
      * Faz logoff do cliente atualmente logado.
      */
     public void logoff() {
+        try {
+            Cliente.salvarTodosClientes(clientes);
+        } catch (IOException e) {
+            System.err.println("Erro ao salvar clientes: " + e.getMessage());
+        }
         clienteAtual = null;
     }
 }

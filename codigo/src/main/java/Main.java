@@ -29,7 +29,7 @@ public class Main {
             System.out.println("1 - Cadastrar");
             System.out.println("2 - Filtrar");
             System.out.println("3 - Assistir");
-            System.out.println("4 - Adicionar a sua Lista para Ver");
+            System.out.println("4 - Gerenciar sua Lista para Ver");
             System.out.println("5 - Avaliar");
             System.out.println("6 - Avaliar e Comentar");
             System.out.println("7 - Logoff");
@@ -40,7 +40,6 @@ public class Main {
             op = sc.nextInt();
             sc.nextLine();
 
-            if (op == 0) break;
             switch (op) {
                 case 1:
                     Media media = handleCadastrar();
@@ -58,7 +57,7 @@ public class Main {
                     handleAssistir(ps, cliente);
                     break;
                 case 4:
-                    handleWatchlist();
+                    handleWatchlist(cliente, ps);
                     break;
                 case 5:
                     handleAvaliar();
@@ -69,14 +68,17 @@ public class Main {
                 case 7:
                     ps.logoff();
                     main(args);
+                    sc.close();
+                    return;
+                case 0:
+                    ps.logoff();
+                    sc.close();
                     return;
                 default:
                     System.out.println("Opção inválida. Tente novamente\n");
             }
 
         }
-
-        sc.close();
     }
 
     private static Cliente handleLogin(PlataformaStreaming ps) {
@@ -212,7 +214,47 @@ public class Main {
         else System.out.println("Mídia não encontrada. Tente novamente\n");
     }
 
-    private static void handleWatchlist() {}
+    private static void handleWatchlist(Cliente cliente, PlataformaStreaming ps) {
+        System.out.println("Sua Lista para Ver:");
+        cliente.getListaParaVer().forEach(System.out::println);
+        System.out.println("\nO que você quer fazer?");
+        System.out.println("1 - Adicionar a Lista");
+        System.out.println("2 - Remover da Lista");
+        System.out.println("0 - Voltar");
+        int op = sc.nextInt();
+        sc.nextLine();
+
+        switch (op) {
+            case 1:
+                while (true) {
+                    System.out.print("Nome da mídia: ");
+                    String nome = sc.nextLine();
+                    Media media = ps.buscarMidia(nome);
+                    if (!isNull(media)) {
+                        if (cliente.adicionarNaLista(media)) {
+                            System.out.println("Mídia adicionada a lista");
+                            break;
+                        }
+                        System.out.println("Essa mídia já está na lista");
+                    } else System.out.println("Mídia não encontrada. Tente novamente");
+                }
+                break;
+            case 2:
+                System.out.print("Nome da mídia: ");
+                String nome = sc.nextLine();
+                if (cliente.retirarDaLista(nome)) {
+                    System.out.println("Mídia removida da lista");
+                    break;
+                }
+                System.out.println("Mídia não encontrada. Tente novamente");
+                break;
+            case 0:
+                return;
+            default:
+                System.out.println("Opção inválida. Tente novamente");
+                handleWatchlist(cliente, ps);
+        }
+    }
 
     private static void handleAvaliar() {}
 
