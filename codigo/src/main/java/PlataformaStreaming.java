@@ -131,12 +131,16 @@ public class PlataformaStreaming {
      * Registra a audiência de uma mídia pelo nome fornecido.
      * @param nomeMidia o nome da mídia cuja audiência será registrada
      */
-    public void registrarAudiencia(String nomeMidia) {
+    public boolean registrarAudiencia(String nomeMidia) {
         Media midia = buscarMidia(nomeMidia);
         if (midia != null) {
             midia.registrarAudiencia();
             clienteAtual.registrarAudiencia(midia);
+
+            return true;
         }
+
+        return false;
     }
 
     /**

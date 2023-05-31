@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,7 +27,7 @@ public class ClienteTest {
         cliente.adicionarNaLista(serie1);
         cliente.adicionarNaLista(serie2);
 
-        List<Media> listaParaVer = cliente.getListaParaVer();
+        Set<Media> listaParaVer = cliente.getListaParaVer();
 
         assertEquals(2, listaParaVer.size());
         assertTrue(listaParaVer.contains(serie1));
@@ -40,7 +41,7 @@ public class ClienteTest {
 
         cliente.retirarDaLista("Calcinha Preta Documentário");
 
-        List<Media> listaParaVer = cliente.getListaParaVer();
+        Set<Media> listaParaVer = cliente.getListaParaVer();
 
         assertEquals(1, listaParaVer.size());
         assertFalse(listaParaVer.contains(serie1));

@@ -1,6 +1,8 @@
+import java.io.Serializable;
+
 import static java.util.Objects.nonNull;
 
-public class Especialista {
+public class Especialista implements Serializable {
     /**
      * Avalia uma mídia com um comentário, atribuindo uma nota e associando ao cliente.
      *

@@ -1,4 +1,6 @@
-public class Avaliacao {
+import java.io.Serializable;
+
+public class Avaliacao implements Serializable {
     private Cliente cliente;
     Integer nota;
     String comentario;
