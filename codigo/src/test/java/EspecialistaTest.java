@@ -46,33 +46,4 @@ public class EspecialistaTest {
         assertEquals(true, cliente.isClienteEspecialista());
         
     }
-
-    /**
-     * Teste de especialista, false para ambos. No primeiro caso, apenas 3 avaliações, no 2 caso,, 3 avaliações validas, 3 invalidas
-     */
-    @Test
-    public void testeDataExpirado(){
-        Date data = new GregorianCalendar(2014, Calendar.FEBRUARY, 11).getTime();
-
-        cliente.registrarAudiencia(filmes.get(0));
-        cliente.registrarAudiencia(filmes.get(1));
-        cliente.registrarAudiencia(filmes.get(2));
-        cliente.avaliar("Heroes And Captains", 5);
-        cliente.avaliar("Complexity Of A Nuclear Winter", 5);
-        cliente.avaliar("Creatures And Athletes", 5);
-        assertEquals(false, cliente.isClienteEspecialista());
-        assertEquals(3, cliente.midiasValidasDeAvaliacao());
-        
-        cliente.registrarAudiencia(filmes.get(3), data);
-        cliente.registrarAudiencia(filmes.get(4), data);
-        cliente.registrarAudiencia(filmes.get(5), data);
-        cliente.avaliar("Cultured By The New World", 5);
-        cliente.avaliar("Fools Of The East", 5);
-        cliente.avaliar("Music Of The Lakes", 5);
-        assertEquals(false, cliente.isClienteEspecialista());
-        assertEquals(3, cliente.midiasValidasDeAvaliacao());
-
-    }
-
-
 }

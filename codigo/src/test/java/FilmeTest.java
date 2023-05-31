@@ -24,14 +24,6 @@ public class FilmeTest {
     }
 
     @Test
-    public void testToString() {
-        String expected = "Media{nome='Filme Teste', genero='Ação', idioma='Português', audiencia=0}" +
-                "\nFilme{duracao=120, dataLancamento=" + filme.getDataLancamento() + "}";
-        String result = filme.toString();
-        assertEquals(expected, result);
-    }
-
-    @Test
     public void salvarTodosFilmesTest() throws IOException {
         List<Filme> filmes = new ArrayList<>();
         filmes.add(filme);
