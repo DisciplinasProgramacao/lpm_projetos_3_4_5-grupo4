@@ -8,16 +8,40 @@ public class Filme extends Media implements Serializable {
 
     private Integer duracao;
 
+    /**
+     * Construtor que recebe todos os atributos do filme.
+     *
+     * @param id            O ID do filme.
+     * @param nome          O nome do filme.
+     * @param genero        O gênero do filme.
+     * @param idioma        O idioma do filme.
+     * @param duracao       A duração do filme em minutos.
+     * @param dataLancamento A data de lançamento do filme.
+     */
     public Filme(Integer id, String nome, String genero, String idioma, Integer duracao, Date dataLancamento) {
         super(id, nome, genero, idioma, dataLancamento);
         this.duracao = duracao;
     }
 
+    /**
+     * Construtor que recebe todos os atributos do filme, exceto o ID.
+     *
+     * @param nome          O nome do filme.
+     * @param genero        O gênero do filme.
+     * @param idioma        O idioma do filme.
+     * @param duracao       A duração do filme em minutos.
+     * @param dataLancamento A data de lançamento do filme.
+     */
     public Filme(String nome, String genero, String idioma, Integer duracao, Date dataLancamento) {
         super(nome, genero, idioma, dataLancamento);
         this.duracao = duracao;
     }
 
+    /**
+     * Construtor que recebe um array de strings contendo os dados do filme.
+     *
+     * @param dadosLidos O array de strings contendo os dados do filme.
+     */
     public Filme(String[] dadosLidos) {
         super(Integer.parseInt(dadosLidos[0]), dadosLidos[1], "", "", new Date(dadosLidos[2]));
         this.duracao = Integer.parseInt(dadosLidos[3]);
