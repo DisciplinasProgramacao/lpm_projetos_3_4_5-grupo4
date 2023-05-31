@@ -132,6 +132,11 @@ public abstract class Media implements Serializable {
         this.id = id;
     }
 
+    /**
+     * Calcula a média das avaliações.
+     *
+     * @return A média das notas das avaliações.
+     */
     protected double mediaDeAvaliacoes(){
         double mediaDeAvaliacoes = avaliacoes.stream().mapToInt(avaliacao -> avaliacao.nota).average().orElse(0d);
         return mediaDeAvaliacoes;
