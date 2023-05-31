@@ -39,9 +39,9 @@ public class FilmeTest {
 
         Filme.salvarTodosFilmes(filmes);
 
-        assertTrue(new File("filmes.dat").exists());
+        assertTrue(new File("data/filmes.dat").exists());
 
-        new File("filmes.dat").delete();
+        new File("data/filmes.dat").delete();
     }
 
     @Test
@@ -52,7 +52,7 @@ public class FilmeTest {
         Filme.salvarTodosFilmes(filmes);
         List<Filme> filmesCarregados = Filme.carregarTodosFilmes();
         assertEquals(filmes.toString(), filmesCarregados.toString());
-        new File("filmes.dat").delete();
+        new File("data/filmes.dat").delete();
     }
 
     @Test

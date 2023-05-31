@@ -1,13 +1,12 @@
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.io.IOException;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class PlataformaStreaming {
     private String nome;
-    private HashSet<Media> midias;
-    private HashSet<Cliente> clientes;
+    private List<Media> midias;
+    private List<Cliente> clientes;
     private Cliente clienteAtual;
 
     /**
@@ -16,9 +15,20 @@ public class PlataformaStreaming {
      */
     public PlataformaStreaming(String nome) {
         this.nome = nome;
-        midias = new HashSet<>();
-        clientes = new HashSet<>();
         clienteAtual = null;
+        try {
+            midias = Stream.concat(GeradorDeMedia.gerarFilmes(
+                    "data/Filmes.csv").stream(),
+                    GeradorDeMedia.gerarSeries("data/Series.csv").stream()
+            ).collect(Collectors.toList());
+        } catch (Exception e) {
+            midias = new ArrayList<>();
+        }
+        try {
+            clientes = Cliente.carregarTodosClientes();
+        } catch (Exception e) {
+            clientes = new ArrayList<>();
+        }
     }
 
     /**
@@ -34,6 +44,10 @@ public class PlataformaStreaming {
         return clienteAtual;
     }
 
+    public String getNome() {
+        return nome;
+    }
+
     /**
      * Adiciona uma nova mídia à plataforma de streaming.
      * @param midia a mídia a ser adicionada
@@ -47,9 +61,18 @@ public class PlataformaStreaming {
      * Adiciona um novo cliente à plataforma de streaming.
      * @param cliente o cliente a ser adicionado
      */
-    public void adicionarCliente(Cliente cliente) {
-        if (cliente == null) return;
+    public boolean adicionarCliente(Cliente cliente) {
+        if (cliente == null) return false;
+        if (clientes.stream().anyMatch(c -> c.getNomeUsuario().equals(cliente.getNomeUsuario()))) return false;
+
         clientes.add(cliente);
+        try {
+            Cliente.salvarTodosClientes(clientes);
+        } catch (IOException e) {
+            System.out.println("Erro ao salvar clientes: " + e.getMessage());
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -110,13 +133,21 @@ public class PlataformaStreaming {
      */
     public void registrarAudiencia(String nomeMidia) {
         Media midia = buscarMidia(nomeMidia);
-        if (midia != null) midia.registrarAudiencia();
+        if (midia != null) {
+            midia.registrarAudiencia();
+            clienteAtual.registrarAudiencia(midia);
+        }
     }
 
     /**
      * Faz logoff do cliente atualmente logado.
      */
     public void logoff() {
+        try {
+            Cliente.salvarTodosClientes(clientes);
+        } catch (IOException e) {
+            System.err.println("Erro ao salvar clientes: " + e.getMessage());
+        }
         clienteAtual = null;
     }
 }

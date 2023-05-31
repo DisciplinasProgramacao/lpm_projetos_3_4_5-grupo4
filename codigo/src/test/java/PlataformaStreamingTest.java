@@ -5,10 +5,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class PlataformaStreamingTest {
 
-    PlataformaStreaming ps;
+    static PlataformaStreaming ps;
 
     @BeforeAll
-    void setUp() {
+    static void setUp() {
         ps = new PlataformaStreaming("Metflix");
     }
 

@@ -1,31 +1,18 @@
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
-
+import java.util.*;
 import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
 
 public abstract class Media implements Serializable {
-    private static String[] GENEROS = { "Ação", "Comédia", "Romance" };
+    private static final String[] GENEROS = { "Ação", "Comédia", "Romance" };
+    protected Integer id;
     protected String nome;
     protected String genero;
     protected String idioma;
+    protected Date dataLancamento;
     protected Integer audiencia;
     protected List<Avaliacao> avaliacoes;
 
-    private Integer id;
-
-    /**
-     * Construtor da classe Media.
-     *
-     * @param nome    o nome da mídia
-     * @param genero  o gênero da mídia
-     * @param idioma  o idioma da mídia
-     */
-    public Media(String nome, String genero, String idioma) {
+    private void init(String nome, String genero, String idioma, Date dataLancamento) {
         Optional<String> existeGenero = Arrays.stream(GENEROS).filter(g -> g.equals(genero)).findFirst();
         if (existeGenero.isPresent()) {
             this.genero = genero;
@@ -34,8 +21,33 @@ public abstract class Media implements Serializable {
         }
         this.nome = nome;
         this.idioma = idioma;
+        this.dataLancamento = dataLancamento;
         audiencia = 0;
         avaliacoes = new ArrayList<>();
+    }
+
+    /**
+     * Construtor da classe Media.
+     *
+     * @param nome    o nome da mídia
+     * @param genero  o gênero da mídia
+     * @param idioma  o idioma da mídia
+     */
+    public Media(Integer id, String nome, String genero, String idioma, Date dataLancamento) {
+        init(nome, genero, idioma, dataLancamento);
+        this.id = id;
+    }
+
+    /**
+     * Construtor da classe Media.
+     *
+     * @param nome    o nome da mídia
+     * @param genero  o gênero da mídia
+     * @param idioma  o idioma da mídia
+     */
+    public Media(String nome, String genero, String idioma, Date dataLancamento) {
+        init(nome, genero, idioma, dataLancamento);
+        id = gerarId();
     }
 
     /**
@@ -82,21 +94,6 @@ public abstract class Media implements Serializable {
     }
 
     /**
-     * Retorna uma representação em formato de string da mídia.
-     *
-     * @return a representação em formato de string da mídia
-     */
-    @Override
-    public String toString() {
-        return "Media{" +
-                "nome='" + nome + '\'' +
-                ", genero='" + genero + '\'' +
-                ", idioma='" + idioma + '\'' +
-                ", audiencia=" + audiencia +
-                '}';
-    }
-
-    /**
      * Retorna a lista de avaliações da mídia.
      *
      * @return a lista de avaliações da mídia
@@ -135,6 +132,11 @@ public abstract class Media implements Serializable {
         this.id = id;
     }
 
+    /**
+     * Calcula a média das avaliações.
+     *
+     * @return A média das notas das avaliações.
+     */
     protected double mediaDeAvaliacoes(){
         double mediaDeAvaliacoes = avaliacoes.stream().mapToInt(avaliacao -> avaliacao.nota).average().orElse(0d);
         return mediaDeAvaliacoes;
