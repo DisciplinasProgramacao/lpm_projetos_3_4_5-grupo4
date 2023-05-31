@@ -137,13 +137,17 @@ public class Cliente implements Serializable {
      * @param nomeMedia o nome da mídia avaliada
      * @param nota a nota atribuída à mídia pelo cliente
      */
-    public void avaliar(String nomeMedia, int nota) {
+    public boolean avaliar(String nomeMedia, int nota) {
         ItemListaJaVista item = listaJaVistas.stream().filter(s -> s.getMedia().getNome().equals(nomeMedia)).findFirst().orElse(null);
         if (nonNull(item)) {
             Media media = item.getMedia();
             Avaliacao avaliacao = new Avaliacao(this, nota);
             media.addAvaliacao(avaliacao);
+
+            return true;
         }
+
+        return false;
     }
 
     /**

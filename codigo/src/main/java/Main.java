@@ -60,7 +60,7 @@ public class Main {
                     handleWatchlist(cliente, ps);
                     break;
                 case 5:
-                    handleAvaliar();
+                    handleAvaliar(cliente, ps);
                     break;
                 case 6:
                     handleAvaliarComentar();
@@ -210,7 +210,10 @@ public class Main {
         String nome = sc.nextLine();
         Media media = ps.buscarMidia(nome);
 
-        if (!isNull(media)) ps.registrarAudiencia(nome);
+        if (!isNull(media)) {
+            ps.registrarAudiencia(nome);
+            System.out.println("Audiência registrada");
+        }
         else System.out.println("Mídia não encontrada. Tente novamente\n");
     }
 
@@ -256,7 +259,26 @@ public class Main {
         }
     }
 
-    private static void handleAvaliar() {}
+    private static void handleAvaliar(Cliente cliente, PlataformaStreaming ps) {
+        System.out.println("Avaliar mídia");
+        System.out.print("Nome: ");
+        String nome = sc.nextLine();
+        System.out.print("Nota: ");
+        int nota = sc.nextInt();
+        sc.nextLine();
+
+        if (cliente.avaliar(nome, nota)) {
+            System.out.println("Avaliação registrada");
+            return;
+        }
+
+        System.out.println("Falha ao registrar. Certifique-se que a mídia existe e que você já a assistiu");
+        System.out.print("Tentar novamente? (s/n): ");
+        String tryAgain = sc.nextLine();
+        if (tryAgain.contains("s"))
+            handleAvaliar(cliente, ps);
+
+    }
 
     private static void handleAvaliarComentar() {}
 
