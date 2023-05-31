@@ -6,10 +6,22 @@ public class ItemListaJaVista implements Serializable {
     private Media listaJaVistas;
     private Date dataVizualizacao;
 
+    /**
+     * Construtor que cria um ItemListaJaVista com a mídia e a data de visualização fornecidas.
+     *
+     * @param media       A mídia associada ao ItemListaJaVista.
+     * @param dataVizualizacao A data de visualização da mídia.
+     */
     public ItemListaJaVista(Media media, Date dataa){
         this.listaJaVistas = media;
         this.dataVizualizacao = dataa;
     }
+
+    /**
+     * Construtor que cria um ItemListaJaVista com a mídia fornecida e a data de visualização como a data atual.
+     *
+     * @param media A mídia associada ao ItemListaJaVista.
+     */
     public ItemListaJaVista(Media media){
         Date hoje = new Date();
         this.listaJaVistas = media;

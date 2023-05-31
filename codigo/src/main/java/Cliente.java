@@ -32,6 +32,12 @@ public class Cliente implements Serializable {
         return listaVistas;
     }
 
+    /**
+     * Construtor que cria um cliente com o nome de usuário e senha fornecidos.
+     *
+     * @param nomeUsuario O nome de usuário do cliente.
+     * @param senha       A senha do cliente.
+     */
     public Cliente(String nomeUsuario, String senha) {
         this.nomeUsuario = nomeUsuario;
         this.senha = senha;
