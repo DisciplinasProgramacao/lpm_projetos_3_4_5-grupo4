@@ -1,6 +1,7 @@
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 import static java.util.Objects.isNull;
@@ -22,6 +23,7 @@ public class Main {
         int op;
 
         while (true) {
+            System.out.println();
             printDivider();
             System.out.println("Olá, " + cliente.getNomeUsuario());
             printDivider();
@@ -37,7 +39,11 @@ public class Main {
             printDivider();
 
             System.out.print("Operação: ");
-            op = sc.nextInt();
+            try {
+                op = sc.nextInt();
+            } catch (InputMismatchException e) {
+                op = -1;
+            }
             sc.nextLine();
 
             switch (op) {
@@ -54,16 +60,16 @@ public class Main {
                     list.forEach(System.out::println);
                     break;
                 case 3:
-                    handleAssistir(ps, cliente);
+                    handleAssistir(ps);
                     break;
                 case 4:
                     handleWatchlist(cliente, ps);
                     break;
                 case 5:
-                    handleAvaliar();
+                    handleAvaliar(cliente, ps);
                     break;
                 case 6:
-                    handleAvaliarComentar();
+                    handleAvaliarComentar(cliente);
                     break;
                 case 7:
                     ps.logoff();
@@ -113,9 +119,14 @@ public class Main {
                     String newPassword = sc.nextLine();
 
                     Cliente newCliente = new Cliente(newUsername, newPassword);
-                    if (ps.adicionarCliente(newCliente)) return newCliente;
+                    if (ps.adicionarCliente(newCliente)) {
+                        ps.login(newUsername, newPassword);
+                        return newCliente;
+                    }
                     System.out.println("Esse usuário já existe\n");
                 }
+            case 0:
+
             default:
                 System.out.println("Opção inválida\n");
                 return handleLogin(ps);
@@ -205,13 +216,20 @@ public class Main {
         }
     }
 
-    private static void handleAssistir(PlataformaStreaming ps, Cliente cliente) {
+    private static void handleAssistir(PlataformaStreaming ps) {
         System.out.print("Escreva o nome da mídia que deseja assistir: ");
         String nome = sc.nextLine();
         Media media = ps.buscarMidia(nome);
 
-        if (!isNull(media)) ps.registrarAudiencia(nome);
-        else System.out.println("Mídia não encontrada. Tente novamente\n");
+        if (!isNull(media)) {
+            if (ps.registrarAudiencia(nome))
+                System.out.println("Audiência registrada");
+            else System.out.println("Você já assistiu essa mídia");
+        }
+        else {
+            System.out.println("Mídia não encontrada. Tente novamente\n");
+            handleAssistir(ps);
+        }
     }
 
     private static void handleWatchlist(Cliente cliente, PlataformaStreaming ps) {
@@ -256,9 +274,40 @@ public class Main {
         }
     }
 
-    private static void handleAvaliar() {}
+    private static void handleAvaliar(Cliente cliente, PlataformaStreaming ps) {
+        System.out.println("Avaliar mídia");
+        System.out.print("Nome: ");
+        String nome = sc.nextLine();
+        System.out.print("Nota: ");
+        int nota = sc.nextInt();
+        sc.nextLine();
 
-    private static void handleAvaliarComentar() {}
+        if (cliente.avaliar(nome, nota)) {
+            System.out.println("Avaliação registrada");
+            return;
+        }
+
+        System.out.println("Falha ao registrar. Certifique-se que a mídia existe e que você já a assistiu");
+        System.out.print("Tentar novamente? (s/n): ");
+        String tryAgain = sc.nextLine();
+        if (tryAgain.contains("s"))
+            handleAvaliar(cliente, ps);
+
+    }
+
+    private static void handleAvaliarComentar(Cliente cliente) {
+        System.out.println("Avaliar com comentário");
+        System.out.print("Nome: ");
+        String nome = sc.nextLine();
+        System.out.print("Nota: ");
+        int nota = sc.nextInt();
+        sc.nextLine();
+        System.out.print("Comentário: ");
+        String comentario = sc.nextLine();
+
+        if (cliente.avaliarComComentario(nome, nota, comentario))
+            System.out.println("Avaliação registrada");
+    }
 
     private static int handleFilmeOuSerie(String prefix) {
         System.out.println(prefix + "Filme ou Série?");

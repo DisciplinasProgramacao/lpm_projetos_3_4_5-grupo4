@@ -32,6 +32,12 @@ public class Cliente implements Serializable {
         return listaVistas;
     }
 
+    /**
+     * Construtor que cria um cliente com o nome de usuário e senha fornecidos.
+     *
+     * @param nomeUsuario O nome de usuário do cliente.
+     * @param senha       A senha do cliente.
+     */
     public Cliente(String nomeUsuario, String senha) {
         this.nomeUsuario = nomeUsuario;
         this.senha = senha;
@@ -77,19 +83,26 @@ public class Cliente implements Serializable {
         return listaParaVer.stream().filter(l -> l.getIdioma().equals(idioma)).collect(Collectors.toList());
     }
 
+    private boolean audiencia(Media media, Date date) {
+        Optional<ItemListaJaVista> existe = listaJaVistas.stream().filter(s -> s.getMedia().getId().equals(media.getId())).findFirst();
+        if (existe.isEmpty()) {
+            media.registrarAudiencia();
+            this.listaJaVistas.add(new ItemListaJaVista(media, date));
+            this.isClienteEspecialista();
+            return true;
+        }
+
+        return false;
+    }
+
     /**
      * Registra a visualização de uma mídia pelo cliente.
      * Se a mídia já foi registrada como vista pelo cliente, não faz nada.
      *
      * @param media a mídia a ser registrada como vista
      */
-    public void registrarAudiencia(Media media) {
-        Optional<ItemListaJaVista> existe = listaJaVistas.stream().filter(s -> s.equals(media)).findFirst();
-        if (existe.isEmpty()) {
-            media.registrarAudiencia();
-            Date hoje = new Date();
-            this.listaJaVistas.add(new ItemListaJaVista(media, hoje));
-        }
+    public boolean registrarAudiencia(Media media) {
+        return audiencia(media, new Date());
     }
 
     /**
@@ -99,13 +112,8 @@ public class Cliente implements Serializable {
      * @param media a mídia a ser registrada como vista
      * @param data a data o qual foi visto
      */
-
-    public void registrarAudiencia(Media media, Date data) {
-        Optional<ItemListaJaVista> existe = listaJaVistas.stream().filter(s -> s.equals(media)).findFirst();
-        if (existe.isEmpty()) {
-            media.registrarAudiencia();
-            this.listaJaVistas.add(new ItemListaJaVista(media, data));
-        }
+    public boolean registrarAudiencia(Media media, Date data) {
+        return audiencia(media, data);
     }
 
     /**
@@ -116,7 +124,7 @@ public class Cliente implements Serializable {
      */
     public static void salvarTodosClientes(List<Cliente> allClientes) throws IOException {
         GenericDao<Cliente> clienteDao = new GenericDao<>();
-        clienteDao.save(allClientes, "clientes.dat");
+        clienteDao.save(allClientes, "data/clientes.dat");
     }
 
     /**
@@ -128,7 +136,7 @@ public class Cliente implements Serializable {
      */
     public static List<Cliente> carregarTodosClientes() throws IOException, ClassNotFoundException {
         GenericDao<Cliente> clienteDao = new GenericDao<>();
-        return clienteDao.load("clientes.dat");
+        return clienteDao.load("data/clientes.dat");
     }
 
     /**
@@ -137,13 +145,17 @@ public class Cliente implements Serializable {
      * @param nomeMedia o nome da mídia avaliada
      * @param nota a nota atribuída à mídia pelo cliente
      */
-    public void avaliar(String nomeMedia, int nota) {
+    public boolean avaliar(String nomeMedia, int nota) {
         ItemListaJaVista item = listaJaVistas.stream().filter(s -> s.getMedia().getNome().equals(nomeMedia)).findFirst().orElse(null);
         if (nonNull(item)) {
             Media media = item.getMedia();
             Avaliacao avaliacao = new Avaliacao(this, nota);
             media.addAvaliacao(avaliacao);
+
+            return true;
         }
+
+        return false;
     }
 
     /**
@@ -178,11 +190,13 @@ public class Cliente implements Serializable {
      * @param comentario O comentário relacionado à avaliação da mídia.
      */
 
-    public void avaliarComComentario(String nomeMedia, int nota, String comentario) {
+    public boolean avaliarComComentario(String nomeMedia, int nota, String comentario) {
         try {
             this.tipoCliente.avaliarComComentario(nomeMedia, nota, comentario, this);
+            return true;
         } catch (NullPointerException e) {
             System.err.println("Voce deve ser cliente especialista para escrever comentario");
+            return false;
         }
     }
 
