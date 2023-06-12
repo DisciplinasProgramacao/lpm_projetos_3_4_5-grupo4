@@ -30,7 +30,8 @@ public abstract class Media implements Serializable {
      * Construtor da classe Media.
      *
      * @param nome   o nome da mídia
-     * @param genero o gênero da mídia
+     * @param genero o gênero da mídia. Caso o genero não seja encontrado, sera
+     *               atribuido um genero aleatorio
      * @param idioma o idioma da mídia
      */
     public Media(Integer id, String nome, String genero, String idioma, Date dataLancamento) {
