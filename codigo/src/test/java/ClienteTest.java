@@ -14,11 +14,14 @@ public class ClienteTest {
     private Cliente cliente;
     private Serie serie1;
     private Serie serie2;
+    private Filme filme1;
+    private Serie serie3;
 
     @BeforeEach
     void setUp() {
         cliente = new Cliente("Nilocan2022", "sabhsjabjhbsajh");
-        serie1 = new Serie("Calcinha Preta Documentário", "Ação", "catalão", new Date(), 11);
+        filme1 = new Filme("Filme Teste", "Romance", "Português", 120, new Date());
+        serie1 = new Serie("Calcinha Preta Documentário", "Acao", "catalão", new Date(), 11);
         serie2 = new Serie("Quebrando camas", "Comédia", "russo", new Date(), 13);
     }
 
@@ -52,9 +55,10 @@ public class ClienteTest {
     void testFiltrarPorGenero() {
         cliente.adicionarNaLista(serie1);
         cliente.adicionarNaLista(serie2);
+        cliente.adicionarNaLista(filme1);
 
-        List<Media> seriesFiltradas = cliente.filtrarPorGenero("Ação");
-
+        List<Media> seriesFiltradas = cliente.filtrarPorGenero("Acao");
+        assertEquals(3, cliente.listaParaVer.size());
         assertEquals(1, seriesFiltradas.size());
         assertTrue(seriesFiltradas.contains(serie1));
     }
@@ -99,7 +103,7 @@ public class ClienteTest {
         Filme f3 = new Filme("filme 3", "genero 2", "en", 100, new Date());
         Filme f4 = new Filme("filme 4", "genero 2", "en", 100, new Date());
         Filme f5 = new Filme("filme 5", "genero 2", "en", 100, new Date());
-        for (Filme filme : List.of(f,f2,f3,f4,f5)) {
+        for (Filme filme : List.of(f, f2, f3, f4, f5)) {
             cliente.registrarAudiencia(filme);
         }
         boolean resultado = cliente.isClienteEspecialista();
@@ -114,7 +118,7 @@ public class ClienteTest {
         Filme f4 = new Filme("filme 4", "genero 2", "en", 100, new Date());
         Filme f5 = new Filme("filme 5", "genero 2", "en", 100, new Date());
 
-        for (Filme filme : List.of(f,f2,f3,f4,f5)) {
+        for (Filme filme : List.of(f, f2, f3, f4, f5)) {
             cliente.registrarAudiencia(filme);
         }
 

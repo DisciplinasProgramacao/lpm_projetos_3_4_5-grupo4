@@ -11,11 +11,11 @@ public class Filme extends Media implements Serializable {
     /**
      * Construtor que recebe todos os atributos do filme.
      *
-     * @param id            O ID do filme.
-     * @param nome          O nome do filme.
-     * @param genero        O gênero do filme.
-     * @param idioma        O idioma do filme.
-     * @param duracao       A duração do filme em minutos.
+     * @param id             O ID do filme.
+     * @param nome           O nome do filme.
+     * @param genero         O gênero do filme.
+     * @param idioma         O idioma do filme.
+     * @param duracao        A duração do filme em minutos.
      * @param dataLancamento A data de lançamento do filme.
      */
     public Filme(Integer id, String nome, String genero, String idioma, Integer duracao, Date dataLancamento) {
@@ -26,10 +26,10 @@ public class Filme extends Media implements Serializable {
     /**
      * Construtor que recebe todos os atributos do filme, exceto o ID.
      *
-     * @param nome          O nome do filme.
-     * @param genero        O gênero do filme.
-     * @param idioma        O idioma do filme.
-     * @param duracao       A duração do filme em minutos.
+     * @param nome           O nome do filme.
+     * @param genero         O gênero do filme.
+     * @param idioma         O idioma do filme.
+     * @param duracao        A duração do filme em minutos.
      * @param dataLancamento A data de lançamento do filme.
      */
     public Filme(String nome, String genero, String idioma, Integer duracao, Date dataLancamento) {
@@ -85,8 +85,10 @@ public class Filme extends Media implements Serializable {
      * Carrega todos os filmes de um arquivo.
      *
      * @return Uma lista contendo todos os filmes carregados do arquivo.
-     * @throws IOException            Se ocorrer um erro de IO ao carregar o arquivo.
-     * @throws ClassNotFoundException Se a classe do objeto carregado não for encontrada.
+     * @throws IOException            Se ocorrer um erro de IO ao carregar o
+     *                                arquivo.
+     * @throws ClassNotFoundException Se a classe do objeto carregado não for
+     *                                encontrada.
      */
     public static List<Filme> carregarTodosFilmes() throws IOException, ClassNotFoundException {
         GenericDao<Filme> filmeDao = new GenericDao<>();
@@ -99,7 +101,7 @@ public class Filme extends Media implements Serializable {
                 "duracao=" + duracao +
                 ", id=" + id +
                 ", nome='" + nome + '\'' +
-                ", genero='" + genero + '\'' +
+                ", genero='" + this.getGenero() + '\'' +
                 ", idioma='" + idioma + '\'' +
                 ", dataLancamento=" + dataLancamento +
                 ", audiencia=" + audiencia +

@@ -25,7 +25,7 @@ public class Cliente implements Serializable {
     }
 
     public List<Media> getListaJaVistas() {
-        List<Media> listaVistas  = new ArrayList<Media>();
+        List<Media> listaVistas = new ArrayList<Media>();
         for (ItemListaJaVista media : listaJaVistas) {
             listaVistas.add(media.getMedia());
         }
@@ -55,7 +55,8 @@ public class Cliente implements Serializable {
     }
 
     /**
-     * Remove uma mídia da lista de mídias para ver do cliente, com base no nome da mídia.
+     * Remove uma mídia da lista de mídias para ver do cliente, com base no nome da
+     * mídia.
      *
      * @param nomeMedia o nome da mídia a ser removida
      */
@@ -70,7 +71,15 @@ public class Cliente implements Serializable {
      * @return uma lista de mídias filtradas por gênero
      */
     public List<Media> filtrarPorGenero(String genero) {
-        return listaParaVer.stream().filter(l -> l.getGenero().equals(genero)).collect(Collectors.toList());
+        Optional<Generos> generoProcurado = Arrays.stream(Generos.values())
+                .filter(g -> g.name().equalsIgnoreCase(genero))
+                .findFirst();
+
+        if (generoProcurado.isPresent()) {
+            return listaParaVer.stream().filter(l -> l.getGenero().equals(generoProcurado.get().name()))
+                    .collect(Collectors.toList());
+        }
+        return null;
     }
 
     /**
@@ -84,7 +93,8 @@ public class Cliente implements Serializable {
     }
 
     private boolean audiencia(Media media, Date date) {
-        Optional<ItemListaJaVista> existe = listaJaVistas.stream().filter(s -> s.getMedia().getId().equals(media.getId())).findFirst();
+        Optional<ItemListaJaVista> existe = listaJaVistas.stream()
+                .filter(s -> s.getMedia().getId().equals(media.getId())).findFirst();
         if (existe.isEmpty()) {
             media.registrarAudiencia();
             this.listaJaVistas.add(new ItemListaJaVista(media, date));
@@ -110,7 +120,7 @@ public class Cliente implements Serializable {
      * Se a mídia já foi registrada como vista pelo cliente, não faz nada.
      *
      * @param media a mídia a ser registrada como vista
-     * @param data a data o qual foi visto
+     * @param data  a data o qual foi visto
      */
     public boolean registrarAudiencia(Media media, Date data) {
         return audiencia(media, data);
@@ -131,8 +141,10 @@ public class Cliente implements Serializable {
      * Carrega a lista de clientes salva no arquivo "clientes.dat".
      *
      * @return uma lista de clientes carregada do arquivo
-     * @throws IOException se ocorrer um erro de I/O durante a leitura do arquivo
-     * @throws ClassNotFoundException se a classe do objeto lido do arquivo não for encontrada
+     * @throws IOException            se ocorrer um erro de I/O durante a leitura do
+     *                                arquivo
+     * @throws ClassNotFoundException se a classe do objeto lido do arquivo não for
+     *                                encontrada
      */
     public static List<Cliente> carregarTodosClientes() throws IOException, ClassNotFoundException {
         GenericDao<Cliente> clienteDao = new GenericDao<>();
@@ -143,10 +155,11 @@ public class Cliente implements Serializable {
      * Adiciona uma avaliação (nota) de uma mídia vista pelo cliente.
      *
      * @param nomeMedia o nome da mídia avaliada
-     * @param nota a nota atribuída à mídia pelo cliente
+     * @param nota      a nota atribuída à mídia pelo cliente
      */
     public boolean avaliar(String nomeMedia, int nota) {
-        ItemListaJaVista item = listaJaVistas.stream().filter(s -> s.getMedia().getNome().equals(nomeMedia)).findFirst().orElse(null);
+        ItemListaJaVista item = listaJaVistas.stream().filter(s -> s.getMedia().getNome().equals(nomeMedia)).findFirst()
+                .orElse(null);
         if (nonNull(item)) {
             Media media = item.getMedia();
             Avaliacao avaliacao = new Avaliacao(this, nota);
@@ -159,12 +172,13 @@ public class Cliente implements Serializable {
     }
 
     /**
-     * Verifica se o cliente esta qualificado como especialista. True para caso tenha 5 avaliações nos ultimos 30 dias.
+     * Verifica se o cliente esta qualificado como especialista. True para caso
+     * tenha 5 avaliações nos ultimos 30 dias.
      * 
      * @return se o cliente é especialista
      */
     public boolean isClienteEspecialista() {
-        if (this.midiasValidasDeAvaliacao() >=5) {
+        if (this.midiasValidasDeAvaliacao() >= 5) {
             this.tipoCliente = new Especialista();
             return true;
         } else {
@@ -175,15 +189,18 @@ public class Cliente implements Serializable {
     }
 
     /**
-     * Verifica a quantidade de avaliações que são considerada validas para qualificação de especialista
+     * Verifica a quantidade de avaliações que são considerada validas para
+     * qualificação de especialista
+     * 
      * @return numero de avaliações validas
      */
-    public int midiasValidasDeAvaliacao(){
+    public int midiasValidasDeAvaliacao() {
         return (int) listaJaVistas.stream().filter(item -> item.isValid()).count();
     }
 
     /**
-     * Avalia uma mídia com um comentário, atribuindo uma nota e associando ao cliente.
+     * Avalia uma mídia com um comentário, atribuindo uma nota e associando ao
+     * cliente.
      *
      * @param nomeMedia  O nome da mídia a ser avaliada.
      * @param nota       A nota atribuída à mídia.

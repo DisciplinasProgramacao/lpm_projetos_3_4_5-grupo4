@@ -9,10 +9,10 @@ public class Serie extends Media implements Serializable {
     /**
      * Construtor da classe Serie.
      *
-     * @param nome               o nome da série
-     * @param genero             o gênero da série
-     * @param idioma             o idioma da série
-     * @param dataLancamento     a data de lançamento da série
+     * @param nome                o nome da série
+     * @param genero              o gênero da série
+     * @param idioma              o idioma da série
+     * @param dataLancamento      a data de lançamento da série
      * @param quantidadeEpisodios a quantidade de episódios da série
      * @throws Error se a quantidade de episódios for menor que 2
      */
@@ -27,15 +27,16 @@ public class Serie extends Media implements Serializable {
     /**
      * Construtor da classe Serie.
      *
-     * @param id                 o id da série
-     * @param nome               o nome da série
-     * @param genero             o gênero da série
-     * @param idioma             o idioma da série
-     * @param dataLancamento     a data de lançamento da série
+     * @param id                  o id da série
+     * @param nome                o nome da série
+     * @param genero              o gênero da série
+     * @param idioma              o idioma da série
+     * @param dataLancamento      a data de lançamento da série
      * @param quantidadeEpisodios a quantidade de episódios da série
      * @throws Error se a quantidade de episódios for menor que 2
      */
-    public Serie(Integer id, String nome, String genero, String idioma, Date dataLancamento, Integer quantidadeEpisodios) {
+    public Serie(Integer id, String nome, String genero, String idioma, Date dataLancamento,
+            Integer quantidadeEpisodios) {
         super(id, nome, genero, idioma, dataLancamento);
         if (quantidadeEpisodios < 2) {
             throw new Error("Precisa ter no mínimo 2 episódios");
@@ -71,8 +72,10 @@ public class Serie extends Media implements Serializable {
      * Carrega todas as séries de um arquivo.
      *
      * @return a lista de todas as séries carregadas do arquivo
-     * @throws IOException            caso ocorra um erro durante o processo de carregamento
-     * @throws ClassNotFoundException caso a classe da série não seja encontrada durante o processo de carregamento
+     * @throws IOException            caso ocorra um erro durante o processo de
+     *                                carregamento
+     * @throws ClassNotFoundException caso a classe da série não seja encontrada
+     *                                durante o processo de carregamento
      */
     public static List<Serie> carregarTodasSeries() throws IOException, ClassNotFoundException {
         GenericDao<Serie> serieDao = new GenericDao<>();
@@ -82,7 +85,8 @@ public class Serie extends Media implements Serializable {
     /**
      * Gera os dados da série.
      *
-     * @return uma string com os dados da série no formato "idSerie;nome;quantidadeEpisodios"
+     * @return uma string com os dados da série no formato
+     *         "idSerie;nome;quantidadeEpisodios"
      */
     public String geraDadosSerie() {
 
@@ -100,7 +104,7 @@ public class Serie extends Media implements Serializable {
                 "quantidadeEpisodios=" + quantidadeEpisodios +
                 ", id=" + id +
                 ", nome='" + nome + '\'' +
-                ", genero='" + genero + '\'' +
+                ", genero='" + this.getGenero() + '\'' +
                 ", idioma='" + idioma + '\'' +
                 ", dataLancamento=" + dataLancamento +
                 ", audiencia=" + audiencia +

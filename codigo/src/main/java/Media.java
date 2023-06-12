@@ -3,21 +3,21 @@ import java.util.*;
 import static java.util.Objects.isNull;
 
 public abstract class Media implements Serializable {
-    private static final String[] GENEROS = { "Ação", "Comédia", "Romance" };
+    private Generos GENERO;
     protected Integer id;
     protected String nome;
-    protected String genero;
     protected String idioma;
     protected Date dataLancamento;
     protected Integer audiencia;
     protected List<Avaliacao> avaliacoes;
 
     private void init(String nome, String genero, String idioma, Date dataLancamento) {
-        Optional<String> existeGenero = Arrays.stream(GENEROS).filter(g -> g.equals(genero)).findFirst();
+        Optional<Generos> existeGenero = Arrays.stream(Generos.values()).filter(g -> g.name().equalsIgnoreCase(genero))
+                .findFirst();
         if (existeGenero.isPresent()) {
-            this.genero = genero;
+            this.GENERO = existeGenero.get();
         } else {
-            this.genero = "";
+            this.GENERO = Generos.randomGeneros();
         }
         this.nome = nome;
         this.idioma = idioma;
@@ -29,9 +29,9 @@ public abstract class Media implements Serializable {
     /**
      * Construtor da classe Media.
      *
-     * @param nome    o nome da mídia
-     * @param genero  o gênero da mídia
-     * @param idioma  o idioma da mídia
+     * @param nome   o nome da mídia
+     * @param genero o gênero da mídia
+     * @param idioma o idioma da mídia
      */
     public Media(Integer id, String nome, String genero, String idioma, Date dataLancamento) {
         init(nome, genero, idioma, dataLancamento);
@@ -41,9 +41,9 @@ public abstract class Media implements Serializable {
     /**
      * Construtor da classe Media.
      *
-     * @param nome    o nome da mídia
-     * @param genero  o gênero da mídia
-     * @param idioma  o idioma da mídia
+     * @param nome   o nome da mídia
+     * @param genero o gênero da mídia
+     * @param idioma o idioma da mídia
      */
     public Media(String nome, String genero, String idioma, Date dataLancamento) {
         init(nome, genero, idioma, dataLancamento);
@@ -65,7 +65,7 @@ public abstract class Media implements Serializable {
      * @return o gênero da mídia
      */
     public String getGenero() {
-        return genero;
+        return GENERO.name();
     }
 
     /**
@@ -108,7 +108,9 @@ public abstract class Media implements Serializable {
      * @param avaliacao a avaliação a ser adicionada
      */
     public void addAvaliacao(Avaliacao avaliacao) {
-        Avaliacao clienteJaAvaliou = avaliacoes.stream().filter(a -> a.getCliente().getNomeUsuario().equals(avaliacao.getCliente().getNomeUsuario())).findFirst().orElse(null);
+        Avaliacao clienteJaAvaliou = avaliacoes.stream()
+                .filter(a -> a.getCliente().getNomeUsuario().equals(avaliacao.getCliente().getNomeUsuario()))
+                .findFirst().orElse(null);
         if (isNull(clienteJaAvaliou)) {
             this.avaliacoes.add(avaliacao);
         }
@@ -137,7 +139,7 @@ public abstract class Media implements Serializable {
      *
      * @return A média das notas das avaliações.
      */
-    protected double mediaDeAvaliacoes(){
+    protected double mediaDeAvaliacoes() {
         double mediaDeAvaliacoes = avaliacoes.stream().mapToInt(avaliacao -> avaliacao.nota).average().orElse(0d);
         return mediaDeAvaliacoes;
     }
