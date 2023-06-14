@@ -97,6 +97,7 @@ public class Cliente implements Serializable {
                 .filter(s -> s.getMedia().getId().equals(media.getId())).findFirst();
         if (existe.isEmpty()) {
             media.registrarAudiencia();
+            this.retirarDaLista(media.nome);
             this.listaJaVistas.add(new ItemListaJaVista(media, date));
             this.isClienteEspecialista();
             return true;

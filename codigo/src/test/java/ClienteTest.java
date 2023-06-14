@@ -152,4 +152,13 @@ public class ClienteTest {
 
         assertEquals(2, midiasValidas);
     }
+
+    @Test
+    void testRemoveDaListaParaVer() {
+        cliente.adicionarNaLista(serie1);
+
+        cliente.registrarAudiencia(serie1);
+
+        assertFalse(cliente.getListaParaVer().contains(serie1));
+    }
 }
