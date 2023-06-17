@@ -39,7 +39,11 @@ public class PlataformaStreaming {
      */
     public Cliente login(String nomeUsuario, String senha) {
         Optional<Cliente> cliente = clientes.stream().filter(c -> c.getNomeUsuario().equals(nomeUsuario) && c.getSenha().equals(senha)).findFirst();
-        clienteAtual = cliente.orElse(null);
+        if (cliente.isPresent()) {
+            clienteAtual = cliente.get();
+            if (clienteAtual.getListaJaVistas().isEmpty() && clienteAtual.getListaParaVer().isEmpty())
+                GeradorDeClientes.recoverListas(clienteAtual, midias);
+        }
 
         return clienteAtual;
     }
