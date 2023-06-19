@@ -13,7 +13,7 @@ public class Cliente implements Serializable {
     Set<Media> listaParaVer;
     List<ItemListaJaVista> listaJaVistas;
 
-    Especialista tipoCliente = null;
+    IComentarista comentarista;
 
     public String getNomeUsuario() {
         return nomeUsuario;
@@ -35,6 +35,14 @@ public class Cliente implements Serializable {
         return listaVistas;
     }
 
+    private void init(String nomeUsuario, String senha) {
+        this.nomeUsuario = nomeUsuario;
+        this.senha = senha;
+        this.listaJaVistas = new ArrayList<>();
+        this.listaParaVer = new HashSet<>();
+        comentarista = new ClientePadrao();
+    }
+
     /**
      * Construtor que cria um cliente com o nome de usuário e senha fornecidos.
      *
@@ -42,10 +50,19 @@ public class Cliente implements Serializable {
      * @param senha       A senha do cliente.
      */
     public Cliente(String nomeUsuario, String senha) {
-        this.nomeUsuario = nomeUsuario;
-        this.senha = senha;
-        this.listaJaVistas = new ArrayList<>();
-        this.listaParaVer = new HashSet<>();
+        init(nomeUsuario, senha);
+    }
+
+    /**
+     * Construtor que cria um cliente com o nome de usuário e senha fornecidos.
+     *
+     * @param nomeUsuario   O nome de usuário do cliente.
+     * @param senha         A senha do cliente.
+     * @param comentarista  A categoria de comentarista do cliente.
+     */
+    public Cliente(String nomeUsuario, String senha, IComentarista comentarista) {
+        init(nomeUsuario, senha);
+        this.comentarista = comentarista;
     }
 
     /**
@@ -54,10 +71,7 @@ public class Cliente implements Serializable {
      * @param splittedCliente Array de strings que representam um cliente
      */
     public Cliente(String[] splittedCliente) {
-        this.nomeUsuario = splittedCliente[1];
-        this.senha = splittedCliente[2];
-        this.listaJaVistas = new ArrayList<>();
-        this.listaParaVer = new HashSet<>();
+        init(splittedCliente[1], splittedCliente[2]);
     }
 
     /**
@@ -116,7 +130,6 @@ public class Cliente implements Serializable {
             media.registrarAudiencia();
             this.retirarDaLista(media.nome);
             this.listaJaVistas.add(new ItemListaJaVista(media, date));
-            this.isClienteEspecialista();
             return true;
         }
 
@@ -194,23 +207,6 @@ public class Cliente implements Serializable {
     }
 
     /**
-     * Verifica se o cliente esta qualificado como especialista. True para caso
-     * tenha 5 avaliações nos ultimos 30 dias.
-     * 
-     * @return se o cliente é especialista
-     */
-    public boolean isClienteEspecialista() {
-        if (this.midiasValidasDeAvaliacao() >= 5) {
-            this.tipoCliente = new Especialista();
-            return true;
-        } else {
-            this.tipoCliente = null;
-            return false;
-        }
-
-    }
-
-    /**
      * Verifica a quantidade de avaliações que são considerada validas para
      * qualificação de especialista
      * 
@@ -228,15 +224,16 @@ public class Cliente implements Serializable {
      * @param nota       A nota atribuída à mídia.
      * @param comentario O comentário relacionado à avaliação da mídia.
      */
-
     public boolean avaliarComComentario(String nomeMedia, int nota, String comentario) {
-        try {
-            this.tipoCliente.avaliarComComentario(nomeMedia, nota, comentario, this);
-            return true;
-        } catch (NullPointerException e) {
-            System.err.println("Voce deve ser cliente especialista para escrever comentario");
-            return false;
-        }
+        if (!comentarista.podeComentar()) return false;
+
+        var jaViu = listaJaVistas.stream().filter(m -> m.getMedia().getNome().equals(nomeMedia)).findFirst();
+        if (jaViu.isEmpty()) return false;
+
+        var avaliacao = new Avaliacao(this, nota, comentario);
+        jaViu.get().getMedia().addAvaliacao(avaliacao);
+
+        return true;
     }
 
     public boolean equals(Cliente cliente) {
@@ -249,7 +246,7 @@ public class Cliente implements Serializable {
                 "nomeUsuario='" + nomeUsuario + '\'' +
                 ", listaParaVer=" + listaParaVer +
                 ", listaJaVistas=" + listaJaVistas +
-                ", tipoCliente=" + tipoCliente +
+                ", comentarista=" + comentarista +
                 '}';
     }
 }
