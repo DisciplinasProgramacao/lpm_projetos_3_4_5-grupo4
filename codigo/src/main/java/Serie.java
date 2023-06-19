@@ -16,8 +16,8 @@ public class Serie extends Media implements Serializable {
      * @param quantidadeEpisodios a quantidade de episódios da série
      * @throws Error se a quantidade de episódios for menor que 2
      */
-    public Serie(String nome, String genero, String idioma, Date dataLancamento, Integer quantidadeEpisodios) {
-        super(nome, genero, idioma, dataLancamento);
+    public Serie(String nome, String genero, String idioma, Date dataLancamento, Integer quantidadeEpisodios, boolean lancamento) {
+        super(nome, genero, idioma, dataLancamento, lancamento);
         if (quantidadeEpisodios < 2) {
             throw new Error("Precisa ter no mínimo 2 episódios");
         }
@@ -35,8 +35,7 @@ public class Serie extends Media implements Serializable {
      * @param quantidadeEpisodios a quantidade de episódios da série
      * @throws Error se a quantidade de episódios for menor que 2
      */
-    public Serie(Integer id, String nome, String genero, String idioma, Date dataLancamento,
-            Integer quantidadeEpisodios) {
+    public Serie(Integer id, String nome, String genero, String idioma, Date dataLancamento, Integer quantidadeEpisodios) {
         super(id, nome, genero, idioma, dataLancamento);
         if (quantidadeEpisodios < 2) {
             throw new Error("Precisa ter no mínimo 2 episódios");

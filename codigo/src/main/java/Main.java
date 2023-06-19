@@ -66,7 +66,7 @@ public class Main {
                     handleWatchlist(cliente, ps);
                     break;
                 case 5:
-                    handleAvaliar(cliente, ps);
+                    handleAvaliar(cliente);
                     break;
                 case 6:
                     handleAvaliarComentar(cliente);
@@ -117,8 +117,14 @@ public class Main {
                     String newUsername = sc.nextLine();
                     System.out.print("Senha: ");
                     String newPassword = sc.nextLine();
+                    System.out.print("Profissional? (s/n): ");
+                    boolean pro = handleYesOrNo();
 
-                    Cliente newCliente = new Cliente(newUsername, newPassword);
+                    PermissoesCliente pc;
+                    if (pro) pc = new ClienteProfissional();
+                    else pc = new ClientePadrao();
+
+                    Cliente newCliente = new Cliente(newUsername, newPassword, pc);
                     if (ps.adicionarCliente(newCliente)) {
                         ps.login(newUsername, newPassword);
                         return newCliente;
@@ -158,8 +164,10 @@ public class Main {
                     System.out.println("Formato de data inválido. Tente novamente");
                 }
             }
+            System.out.print("É lançamento? (s/n): ");
+            boolean lancamento = handleYesOrNo();
 
-            return new Filme(nome, genero, idioma, duracao, date);
+            return new Filme(nome, genero, idioma, duracao, date, lancamento);
         } else if (op == 2) {
             System.out.println("Informe os dados da série:");
             System.out.print("Nome: ");
@@ -174,7 +182,11 @@ public class Main {
                 try {
                     int episiodios = sc.nextInt();
                     sc.nextLine();
-                    serie = new Serie(nome, genero, idioma, new Date(), episiodios);
+
+                    System.out.print("É lançamento? (s/n): ");
+                    boolean lancamento = handleYesOrNo();
+
+                    serie = new Serie(nome, genero, idioma, new Date(), episiodios, lancamento);
                     break;
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
@@ -200,16 +212,16 @@ public class Main {
             case 1:
                 System.out.print("Qual gênero deseja filtrar? ");
                 String genero = sc.nextLine();
-                return ps.filtrarPorGenero(new CompareGenero(), new Serie("model", genero, "en", new Date(), 5));
+                return ps.filtrarPorGenero(new CompareGenero(), new Serie("model", genero, "en", new Date(), 5, false));
             case 2:
                 System.out.print("Qual idioma deseja filtrar? ");
                 String idioma = sc.nextLine();
-                return ps.filtrarPorIdioma(new CompareIdioma(), new Serie("model", "Romance", idioma, new Date(), 5));
+                return ps.filtrarPorIdioma(new CompareIdioma(), new Serie("model", "Romance", idioma, new Date(), 5, false));
             case 3:
                 System.out.print("Filtrar séries com quantos episódios? ");
                 int eps = sc.nextInt();
                 sc.nextLine();
-                return ps.filtrarPorQtdEpisodios(new CompareQtdEpisodios(), new Serie("model", "Romance", "en", new Date(), eps));
+                return ps.filtrarPorQtdEpisodios(new CompareQtdEpisodios(), new Serie("model", "Romance", "en", new Date(), eps, false));
             default:
                 System.out.println("Opção inválida. Tente novamente");
                 return handleFiltrar(ps);
@@ -274,7 +286,7 @@ public class Main {
         }
     }
 
-    private static void handleAvaliar(Cliente cliente, PlataformaStreaming ps) {
+    private static void handleAvaliar(Cliente cliente) {
         System.out.println("Avaliar mídia");
         System.out.print("Nome: ");
         String nome = sc.nextLine();
@@ -289,9 +301,8 @@ public class Main {
 
         System.out.println("Falha ao registrar. Certifique-se que a mídia existe e que você já a assistiu");
         System.out.print("Tentar novamente? (s/n): ");
-        String tryAgain = sc.nextLine();
-        if (tryAgain.contains("s"))
-            handleAvaliar(cliente, ps);
+        boolean tryAgain = handleYesOrNo();
+        if (tryAgain) handleAvaliar(cliente);
 
     }
 
@@ -319,6 +330,16 @@ public class Main {
         if (op == 1 || op == 2) return op;
 
         return handleFilmeOuSerie(prefix);
+    }
+
+    private static boolean handleYesOrNo() {
+        String res = sc.nextLine();
+        if (res.startsWith("s") || res.startsWith("y")) return true;
+        if (res.startsWith("n")) return false;
+
+        System.out.print("(s/n): ");
+
+        return handleYesOrNo();
     }
 
     private static void printDivider() {

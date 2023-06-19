@@ -49,19 +49,7 @@ public abstract class Media implements Serializable {
      * @param genero o gênero da mídia
      * @param idioma o idioma da mídia
      * @param dataLancamento data de lancamento da midia
-     */
-    public Media(String nome, String genero, String idioma, Date dataLancamento) {
-        init(nome, genero, idioma, dataLancamento, false);
-        id = gerarId();
-    }
-
-    /**
-     * Construtor da classe Media.
-     *
-     * @param nome   o nome da mídia
-     * @param genero o gênero da mídia
-     * @param idioma o idioma da mídia
-     * @param dataLancamento data de lancamento da midia
+     * @param lancamento status lancamento
      */
     public Media(String nome, String genero, String idioma, Date dataLancamento, boolean lancamento) {
         init(nome, genero, idioma, dataLancamento, lancamento);
@@ -158,8 +146,7 @@ public abstract class Media implements Serializable {
      * @return A média das notas das avaliações.
      */
     protected double mediaDeAvaliacoes() {
-        double mediaDeAvaliacoes = avaliacoes.stream().mapToInt(avaliacao -> avaliacao.nota).average().orElse(0d);
-        return mediaDeAvaliacoes;
+        return avaliacoes.stream().mapToInt(avaliacao -> avaliacao.nota).average().orElse(0d);
     }
 
     public boolean isLancamento() {
