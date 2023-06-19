@@ -1,4 +1,4 @@
-public interface IComentarista {
+public interface PermissoesCliente {
     boolean podeComentar();
     boolean podeLancamento();
 }

@@ -1,7 +1,11 @@
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import static java.util.Objects.nonNull;
 
 public class PlataformaStreaming {
     private String nome;
@@ -137,7 +141,7 @@ public class PlataformaStreaming {
      */
     public boolean registrarAudiencia(String nomeMidia) {
         Media midia = buscarMidia(nomeMidia);
-        if (midia != null) {
+        if (nonNull(midia)) {
             midia.registrarAudiencia();
             clienteAtual.registrarAudiencia(midia);
 

@@ -1,4 +1,4 @@
-public class ClienteEspecialista implements IComentarista {
+public class ClienteEspecialista implements PermissoesCliente {
     @Override
     public boolean podeComentar() {
         return true;

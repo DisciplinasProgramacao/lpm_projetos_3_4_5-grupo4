@@ -12,8 +12,7 @@ public class Cliente implements Serializable {
     private String senha;
     Set<Media> listaParaVer;
     List<ItemListaJaVista> listaJaVistas;
-
-    IComentarista comentarista;
+    PermissoesCliente permissoes;
 
     public String getNomeUsuario() {
         return nomeUsuario;
@@ -28,7 +27,7 @@ public class Cliente implements Serializable {
     }
 
     public List<Media> getListaJaVistas() {
-        List<Media> listaVistas = new ArrayList<Media>();
+        List<Media> listaVistas = new ArrayList<>();
         for (ItemListaJaVista media : listaJaVistas) {
             listaVistas.add(media.getMedia());
         }
@@ -40,7 +39,7 @@ public class Cliente implements Serializable {
         this.senha = senha;
         this.listaJaVistas = new ArrayList<>();
         this.listaParaVer = new HashSet<>();
-        comentarista = new ClientePadrao();
+        permissoes = new ClientePadrao();
     }
 
     /**
@@ -58,11 +57,11 @@ public class Cliente implements Serializable {
      *
      * @param nomeUsuario   O nome de usuário do cliente.
      * @param senha         A senha do cliente.
-     * @param comentarista  A categoria de comentarista do cliente.
+     * @param permissoes  A categoria de comentarista do cliente.
      */
-    public Cliente(String nomeUsuario, String senha, IComentarista comentarista) {
+    public Cliente(String nomeUsuario, String senha, PermissoesCliente permissoes) {
         init(nomeUsuario, senha);
-        this.comentarista = comentarista;
+        this.permissoes = permissoes;
     }
 
     /**
@@ -124,16 +123,17 @@ public class Cliente implements Serializable {
 
     private boolean audiencia(Media media, Date date) {
         if (isNull(media)) return false;
+        if (media.isLancamento() && !permissoes.podeLancamento()) return false;
+
         Optional<ItemListaJaVista> existe = listaJaVistas.stream()
                 .filter(s -> s.getMedia().getId().equals(media.getId())).findFirst();
-        if (existe.isEmpty()) {
-            media.registrarAudiencia();
-            this.retirarDaLista(media.nome);
-            this.listaJaVistas.add(new ItemListaJaVista(media, date));
-            return true;
-        }
+        if (existe.isPresent()) return false;
 
-        return false;
+        media.registrarAudiencia();
+        this.retirarDaLista(media.nome);
+        this.listaJaVistas.add(new ItemListaJaVista(media, date));
+
+        return true;
     }
 
     /**
@@ -225,7 +225,7 @@ public class Cliente implements Serializable {
      * @param comentario O comentário relacionado à avaliação da mídia.
      */
     public boolean avaliarComComentario(String nomeMedia, int nota, String comentario) {
-        if (!comentarista.podeComentar()) return false;
+        if (!permissoes.podeComentar()) return false;
 
         var jaViu = listaJaVistas.stream().filter(m -> m.getMedia().getNome().equals(nomeMedia)).findFirst();
         if (jaViu.isEmpty()) return false;
@@ -246,7 +246,7 @@ public class Cliente implements Serializable {
                 "nomeUsuario='" + nomeUsuario + '\'' +
                 ", listaParaVer=" + listaParaVer +
                 ", listaJaVistas=" + listaJaVistas +
-                ", comentarista=" + comentarista +
+                ", comentarista=" + permissoes +
                 '}';
     }
 }
