@@ -240,6 +240,35 @@ public class Cliente implements Serializable {
         return this.nomeUsuario.equals(cliente.getNomeUsuario());
     }
 
+    private void setPermissoes(PermissoesCliente pc) {
+        this.permissoes = pc;
+    }
+
+    public boolean tornarPadrao() {
+        this.setPermissoes(this.permissoes.tornarPadrao());
+
+        return true;
+    }
+
+    public boolean tornarEspecialista() {
+        Date now = new Date();
+        long trintaDiasMs = 30L * 24L * 60L * 60L * 1000L;
+
+        long count = this.listaJaVistas.stream().filter(item -> now.getTime() - item.getDataVizualizacao().getTime() <= trintaDiasMs).count();
+        if (count >= 5) {
+            this.setPermissoes(this.permissoes.tornarEspecialista());
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean tornarProfissional() {
+        this.setPermissoes(this.permissoes.tornarProfissional());
+
+        return true;
+    }
+
     @Override
     public String toString() {
         return "Cliente{" +
