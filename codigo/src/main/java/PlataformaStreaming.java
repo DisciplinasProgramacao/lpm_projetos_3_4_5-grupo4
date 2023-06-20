@@ -9,6 +9,14 @@ public class PlataformaStreaming {
     private List<Cliente> clientes;
     private Cliente clienteAtual;
 
+    public List<Cliente> getClientes() {
+        return clientes;
+    }
+
+    public List<Media> getMidias() {
+        return midias;
+    }
+
     /**
      * Cria uma nova instância de PlataformaStreaming com o nome fornecido.
      * @param nome o nome da plataforma de streaming
@@ -39,11 +47,7 @@ public class PlataformaStreaming {
      */
     public Cliente login(String nomeUsuario, String senha) {
         Optional<Cliente> cliente = clientes.stream().filter(c -> c.getNomeUsuario().equals(nomeUsuario) && c.getSenha().equals(senha)).findFirst();
-        if (cliente.isPresent()) {
-            clienteAtual = cliente.get();
-            if (clienteAtual.getListaJaVistas().isEmpty() && clienteAtual.getListaParaVer().isEmpty())
-                GeradorDeClientes.recoverListas(clienteAtual, midias);
-        }
+        clienteAtual = cliente.orElse(null);
 
         return clienteAtual;
     }
