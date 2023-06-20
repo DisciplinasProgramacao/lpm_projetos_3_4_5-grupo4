@@ -1,10 +1,7 @@
-import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 public class Cliente implements Serializable {
@@ -49,25 +46,22 @@ public class Cliente implements Serializable {
     }
 
     /**
-     * Construtor que cria um cliente com um array de strings
-     *
-     * @param splittedCliente Array de strings que representam um cliente
-     */
-    public Cliente(String[] splittedCliente) {
-        this.nomeUsuario = splittedCliente[1];
-        this.senha = splittedCliente[2];
-        this.listaJaVistas = new ArrayList<>();
-        this.listaParaVer = new HashSet<>();
-    }
-
-    /**
      * Adiciona uma nova mídia à lista de mídias para ver do cliente.
      *
      * @param media a mídia a ser adicionada
      */
     public boolean adicionarNaLista(Media media) {
-        if (isNull(media)) return false;
         return listaParaVer.add(media);
+    }
+
+
+    /**
+     * Adiciona uma nova mídia já vista pelo cliente
+     *
+     * @param media a mídia a ser adicionada
+     */
+    public boolean adicionarNaListaJaVistas(ItemListaJaVista media) {
+        return listaJaVistas.add(media);
     }
 
     /**
@@ -109,12 +103,10 @@ public class Cliente implements Serializable {
     }
 
     private boolean audiencia(Media media, Date date) {
-        if (isNull(media)) return false;
         Optional<ItemListaJaVista> existe = listaJaVistas.stream()
                 .filter(s -> s.getMedia().getId().equals(media.getId())).findFirst();
         if (existe.isEmpty()) {
             media.registrarAudiencia();
-            this.retirarDaLista(media.nome);
             this.listaJaVistas.add(new ItemListaJaVista(media, date));
             this.isClienteEspecialista();
             return true;
@@ -165,12 +157,8 @@ public class Cliente implements Serializable {
      *                                encontrada
      */
     public static List<Cliente> carregarTodosClientes() throws IOException, ClassNotFoundException {
-        File savedClientes = new File("data/clientes.dat");
-        if (savedClientes.exists()) {
-            GenericDao<Cliente> clienteDao = new GenericDao<>();
-            return clienteDao.load(savedClientes.getPath());
-        }
-        return GeradorDeClientes.gerarClientes();
+        GenericDao<Cliente> clienteDao = new GenericDao<>();
+        return clienteDao.load("data/clientes.dat");
     }
 
     /**
@@ -243,13 +231,4 @@ public class Cliente implements Serializable {
         return this.nomeUsuario.equals(cliente.getNomeUsuario());
     }
 
-    @Override
-    public String toString() {
-        return "Cliente{" +
-                "nomeUsuario='" + nomeUsuario + '\'' +
-                ", listaParaVer=" + listaParaVer +
-                ", listaJaVistas=" + listaJaVistas +
-                ", tipoCliente=" + tipoCliente +
-                '}';
-    }
 }

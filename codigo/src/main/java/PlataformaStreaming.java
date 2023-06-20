@@ -9,6 +9,14 @@ public class PlataformaStreaming {
     private List<Cliente> clientes;
     private Cliente clienteAtual;
 
+    public List<Cliente> getClientes() {
+        return clientes;
+    }
+
+    public List<Media> getMidias() {
+        return midias;
+    }
+
     /**
      * Cria uma nova instância de PlataformaStreaming com o nome fornecido.
      * @param nome o nome da plataforma de streaming
@@ -44,7 +52,7 @@ public class PlataformaStreaming {
             if (clienteAtual.getListaJaVistas().isEmpty() && clienteAtual.getListaParaVer().isEmpty())
                 GeradorDeClientes.recoverListas(clienteAtual, midias);
         }
-
+        
         return clienteAtual;
     }
 
