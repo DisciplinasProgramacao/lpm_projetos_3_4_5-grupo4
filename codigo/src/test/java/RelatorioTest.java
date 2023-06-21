@@ -9,7 +9,8 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class RelatorioTest {
-    PlataformaStreaming plataforma = new PlataformaStreaming("teste");
+    PlataformaStreaming plataforma = new PlataformaStreaming("teste", true);
+
     @BeforeEach
     void setUp() {
         for (int i = 0; i <= 120; i++) {

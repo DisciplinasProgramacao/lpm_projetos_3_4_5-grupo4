@@ -21,16 +21,12 @@ public class PlataformaStreaming {
         return midias;
     }
 
-    /**
-     * Cria uma nova instância de PlataformaStreaming com o nome fornecido.
-     * @param nome o nome da plataforma de streaming
-     */
-    public PlataformaStreaming(String nome) {
+    private void init(String nome) {
         this.nome = nome;
         clienteAtual = null;
         try {
             midias = Stream.concat(GeradorDeMedia.gerarFilmes(
-                    "data/Filmes.csv").stream(),
+                            "data/Filmes.csv").stream(),
                     GeradorDeMedia.gerarSeries("data/Series.csv").stream()
             ).collect(Collectors.toList());
         } catch (Exception e) {
@@ -41,6 +37,28 @@ public class PlataformaStreaming {
         } catch (Exception e) {
             clientes = new ArrayList<>();
         }
+    }
+
+    /**
+     * Cria uma nova instância de PlataformaStreaming com o nome fornecido.
+     * @param nome o nome da plataforma de streaming
+     */
+    public PlataformaStreaming(String nome) {
+        init(nome);
+    }
+
+    /**
+     * Construtor que possibilita carregar ou não dados dos arquivos
+     * @param nome o nome da plataforma de streaming
+     * @param dontLoadDataFromFiles indica se é para carregar dados dos arquivos ou não
+     */
+    public PlataformaStreaming(String nome, boolean dontLoadDataFromFiles) {
+        if (dontLoadDataFromFiles) {
+            this.nome = nome;
+            clienteAtual = null;
+            midias = new ArrayList<>();
+            clientes = new ArrayList<>();
+        } else init(nome);
     }
 
     /**
@@ -81,14 +99,7 @@ public class PlataformaStreaming {
         if (cliente == null) return false;
         if (clientes.stream().anyMatch(c -> c.getNomeUsuario().equals(cliente.getNomeUsuario()))) return false;
 
-        clientes.add(cliente);
-        try {
-            Cliente.salvarTodosClientes(clientes);
-        } catch (IOException e) {
-            System.out.println("Erro ao salvar clientes: " + e.getMessage());
-            return false;
-        }
-        return true;
+        return clientes.add(cliente);
     }
 
     /**
@@ -164,6 +175,7 @@ public class PlataformaStreaming {
      */
     public void logoff() {
         try {
+            System.out.println("Saindo...");
             Cliente.salvarTodosClientes(clientes);
         } catch (IOException e) {
             System.err.println("Erro ao salvar clientes: " + e.getMessage());

@@ -1,4 +1,6 @@
-public interface PermissoesCliente {
+import java.io.Serializable;
+
+public interface PermissoesCliente extends Serializable {
     boolean podeComentar();
     boolean podeLancamento();
     PermissoesCliente tornarPadrao();
