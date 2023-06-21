@@ -29,12 +29,16 @@ public class Relatorio {
      * @return a String com o resultado
      */
     public static String clienteQueMaisAvaliou(PlataformaStreaming plataformaStreaming) {
-        Map<Cliente, Long> mapCliente = plataformaStreaming.getMidias().stream()
-                .flatMap(c -> c.avaliacoes.stream())
-                .collect(Collectors.groupingBy(Avaliacao::getCliente, Collectors.counting()));
-        var clienteLongEntry = mapCliente.entrySet().stream().max(Comparator.comparing(Map.Entry::getValue)).orElse(null);
-        Cliente maisAvaliou =  clienteLongEntry.getKey();
-        return "O Cliente: " + maisAvaliou.getNomeUsuario() + " foi o que mais avaliou, totalizando: " + clienteLongEntry.getValue();
+        try {
+            Map<Cliente, Long> mapCliente = plataformaStreaming.getMidias().stream()
+                    .flatMap(c -> c.avaliacoes.stream())
+                    .collect(Collectors.groupingBy(Avaliacao::getCliente, Collectors.counting()));
+            var clienteLongEntry = mapCliente.entrySet().stream().max(Comparator.comparing(Map.Entry::getValue)).orElse(null);
+            Cliente maisAvaliou = clienteLongEntry.getKey();
+            return "O Cliente: " + maisAvaliou.getNomeUsuario() + " foi o que mais avaliou, totalizando: " + clienteLongEntry.getValue();
+        } catch (NullPointerException e) {
+            return "Não há avaliações";
+        }
     }
 
     /**
@@ -43,18 +47,21 @@ public class Relatorio {
      * @param plataformaStreaming a plataforma de streaming
      * @return a porcentagem formatada como String
      */
-
     public static String porcentagemClientesMaisDe15Avaliacoes(PlataformaStreaming plataformaStreaming) {
-        Map<Cliente, Long> mapCliente = plataformaStreaming.getMidias().stream()
-                .flatMap(c -> c.avaliacoes.stream())
-                .collect(Collectors.groupingBy(Avaliacao::getCliente, Collectors.counting()));
-        Map<Cliente, Long> clientesComMaisDe15Avaliacoes = mapCliente.entrySet().stream()
-                .filter(entry -> entry.getValue() > 15)
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-        DecimalFormat formato = new DecimalFormat("#.00");
-        Double r =  ((double)clientesComMaisDe15Avaliacoes.size()/ plataformaStreaming.getClientes().size() * 100.0);
-        System.out.println(formato.format(r));
-        return formato.format(r);
+        try {
+            Map<Cliente, Long> mapCliente = plataformaStreaming.getMidias().stream()
+                    .flatMap(c -> c.avaliacoes.stream())
+                    .collect(Collectors.groupingBy(Avaliacao::getCliente, Collectors.counting()));
+            Map<Cliente, Long> clientesComMaisDe15Avaliacoes = mapCliente.entrySet().stream()
+                    .filter(entry -> entry.getValue() > 15)
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+            DecimalFormat formato = new DecimalFormat("#.00");
+            Double r = ((double) clientesComMaisDe15Avaliacoes.size() / plataformaStreaming.getClientes().size() * 100.0);
+            System.out.println(formato.format(r));
+            return formato.format(r);
+        } catch (NullPointerException e) {
+            return "Não há avaliações";
+        }
     }
 
     /**
@@ -64,17 +71,21 @@ public class Relatorio {
      * @return a lista das mídias mais avaliadas
      */
     public static List<Media> dezMidiasMaisAvaliadasComMininoDe100Avaliacoes(PlataformaStreaming plataformaStreaming) {
-        List<Media> dezMidiasComMaisAvaliacoes = plataformaStreaming.getMidias().stream()
-                .filter(media -> media.getAvaliacoes().size() >= 100)
-                .sorted(Comparator.comparingInt(m -> m.getAvaliacoes().size()))
-                .limit(10).collect(Collectors.toList());
+        try {
+            List<Media> dezMidiasComMaisAvaliacoes = plataformaStreaming.getMidias().stream()
+                    .filter(media -> media.getAvaliacoes().size() >= 100)
+                    .sorted(Comparator.comparingInt(m -> m.getAvaliacoes().size()))
+                    .limit(10).collect(Collectors.toList());
 
-        List<Media> ordemDecrescente = new ArrayList<>();
-        for (int i = dezMidiasComMaisAvaliacoes.size() - 1; i >= 0; i--) {
-            Media elemento = dezMidiasComMaisAvaliacoes.get(i);
-            ordemDecrescente.add(elemento);
+            List<Media> ordemDecrescente = new ArrayList<>();
+            for (int i = dezMidiasComMaisAvaliacoes.size() - 1; i >= 0; i--) {
+                Media elemento = dezMidiasComMaisAvaliacoes.get(i);
+                ordemDecrescente.add(elemento);
+            }
+            return ordemDecrescente;
+        } catch (NullPointerException e) {
+            return new ArrayList<>();
         }
-        return ordemDecrescente;
     }
 
     /**
@@ -85,17 +96,21 @@ public class Relatorio {
      * @return a lista das mídias mais avaliadas do gênero especificado
      */
     public static List<Media> dezMidiasMaisAvaliadasComMininoDe100AvaliacoesPorGenero(PlataformaStreaming plataformaStreaming, String  genero) {
-        List<Media> dezMidiasComMaisAvaliacoes = plataformaStreaming.getMidias().stream()
-                .filter(media -> media.getGenero().equals(genero) && media.getAvaliacoes().size() >= 100)
-                .sorted(Comparator.comparingInt(m -> m.getAvaliacoes().size()))
-                .limit(10)
-                .collect(Collectors.toList());
-        List<Media> ordemDecrescente = new ArrayList<>();
-        for (int i = dezMidiasComMaisAvaliacoes.size() - 1; i >= 0; i--) {
-            Media elemento = dezMidiasComMaisAvaliacoes.get(i);
-            ordemDecrescente.add(elemento);
+        try {
+            List<Media> dezMidiasComMaisAvaliacoes = plataformaStreaming.getMidias().stream()
+                    .filter(media -> media.getGenero().equals(genero) && media.getAvaliacoes().size() >= 100)
+                    .sorted(Comparator.comparingInt(m -> m.getAvaliacoes().size()))
+                    .limit(10)
+                    .collect(Collectors.toList());
+            List<Media> ordemDecrescente = new ArrayList<>();
+            for (int i = dezMidiasComMaisAvaliacoes.size() - 1; i >= 0; i--) {
+                Media elemento = dezMidiasComMaisAvaliacoes.get(i);
+                ordemDecrescente.add(elemento);
+            }
+            return ordemDecrescente;
+        } catch (NullPointerException e) {
+            return new ArrayList<>();
         }
-        return ordemDecrescente;
     }
 
 
@@ -106,16 +121,20 @@ public class Relatorio {
      * @return a lista das mídias mais visualizadas
      */
     public static List<Media> dezMidiasComMaisVisualizacoes(PlataformaStreaming plataformaStreaming) {
-        List<Media> dezMidiasComMaisVisualizacoes = plataformaStreaming.getMidias().stream()
-                .sorted(Comparator.comparingInt(Media::getAudiencia))
-                .limit(10).collect(Collectors.toList());
+        try {
+            List<Media> dezMidiasComMaisVisualizacoes = plataformaStreaming.getMidias().stream()
+                    .sorted(Comparator.comparingInt(Media::getAudiencia))
+                    .limit(10).collect(Collectors.toList());
 
-        List<Media> ordemDecrescente = new ArrayList<>();
-        for (int i = dezMidiasComMaisVisualizacoes.size() - 1; i >= 0; i--) {
-            Media elemento = dezMidiasComMaisVisualizacoes.get(i);
-            ordemDecrescente.add(elemento);
+            List<Media> ordemDecrescente = new ArrayList<>();
+            for (int i = dezMidiasComMaisVisualizacoes.size() - 1; i >= 0; i--) {
+                Media elemento = dezMidiasComMaisVisualizacoes.get(i);
+                ordemDecrescente.add(elemento);
+            }
+            return dezMidiasComMaisVisualizacoes;
+        }  catch (NullPointerException e) {
+            return new ArrayList<>();
         }
-        return dezMidiasComMaisVisualizacoes;
     }
 
     /**
@@ -127,16 +146,20 @@ public class Relatorio {
      */
 
     public static List<Media> dezMidiasMaisVisualizacoesPorGenero(PlataformaStreaming plataformaStreaming, String genero) {
-        List<Media> dezMidiasComMaisVisualizacoes = plataformaStreaming.getMidias().stream()
-                .filter(m -> m.getGenero().equals(genero))
-                .sorted(Comparator.comparingInt(Media::getAudiencia))
-                .limit(10).collect(Collectors.toList());
+        try {
+            List<Media> dezMidiasComMaisVisualizacoes = plataformaStreaming.getMidias().stream()
+                    .filter(m -> m.getGenero().equals(genero))
+                    .sorted(Comparator.comparingInt(Media::getAudiencia))
+                    .limit(10).collect(Collectors.toList());
 
-        List<Media> ordemDecrescente = new ArrayList<>();
-        for (int i = dezMidiasComMaisVisualizacoes.size() - 1; i >= 0; i--) {
-            Media elemento = dezMidiasComMaisVisualizacoes.get(i);
-            ordemDecrescente.add(elemento);
+            List<Media> ordemDecrescente = new ArrayList<>();
+            for (int i = dezMidiasComMaisVisualizacoes.size() - 1; i >= 0; i--) {
+                Media elemento = dezMidiasComMaisVisualizacoes.get(i);
+                ordemDecrescente.add(elemento);
+            }
+            return dezMidiasComMaisVisualizacoes;
+        }  catch (NullPointerException e) {
+            return new ArrayList<>();
         }
-        return dezMidiasComMaisVisualizacoes;
     }
 }
