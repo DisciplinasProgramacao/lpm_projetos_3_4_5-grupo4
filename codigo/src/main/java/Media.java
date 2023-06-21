@@ -9,9 +9,10 @@ public abstract class Media implements Serializable {
     protected String idioma;
     protected Date dataLancamento;
     protected Integer audiencia;
+    protected boolean lancamento;
     protected List<Avaliacao> avaliacoes;
 
-    private void init(String nome, String genero, String idioma, Date dataLancamento) {
+    private void init(String nome, String genero, String idioma, Date dataLancamento, boolean lancamento) {
         Optional<Generos> existeGenero = Arrays.stream(Generos.values()).filter(g -> g.name().equalsIgnoreCase(genero))
                 .findFirst();
         if (existeGenero.isPresent()) {
@@ -22,6 +23,7 @@ public abstract class Media implements Serializable {
         this.nome = nome;
         this.idioma = idioma;
         this.dataLancamento = dataLancamento;
+        this.lancamento = lancamento;
         audiencia = 0;
         avaliacoes = new ArrayList<>();
     }
@@ -33,9 +35,10 @@ public abstract class Media implements Serializable {
      * @param genero o gênero da mídia. Caso o genero não seja encontrado, sera
      *               atribuido um genero aleatorio
      * @param idioma o idioma da mídia
+     * @param dataLancamento data de lancamento da midia
      */
     public Media(Integer id, String nome, String genero, String idioma, Date dataLancamento) {
-        init(nome, genero, idioma, dataLancamento);
+        init(nome, genero, idioma, dataLancamento, false);
         this.id = id;
     }
 
@@ -45,9 +48,11 @@ public abstract class Media implements Serializable {
      * @param nome   o nome da mídia
      * @param genero o gênero da mídia
      * @param idioma o idioma da mídia
+     * @param dataLancamento data de lancamento da midia
+     * @param lancamento status lancamento
      */
-    public Media(String nome, String genero, String idioma, Date dataLancamento) {
-        init(nome, genero, idioma, dataLancamento);
+    public Media(String nome, String genero, String idioma, Date dataLancamento, boolean lancamento) {
+        init(nome, genero, idioma, dataLancamento, lancamento);
         id = gerarId();
     }
 
@@ -141,7 +146,10 @@ public abstract class Media implements Serializable {
      * @return A média das notas das avaliações.
      */
     protected double mediaDeAvaliacoes() {
-        double mediaDeAvaliacoes = avaliacoes.stream().mapToInt(avaliacao -> avaliacao.nota).average().orElse(0d);
-        return mediaDeAvaliacoes;
+        return avaliacoes.stream().mapToInt(avaliacao -> avaliacao.nota).average().orElse(0d);
+    }
+
+    public boolean isLancamento() {
+        return lancamento;
     }
 }

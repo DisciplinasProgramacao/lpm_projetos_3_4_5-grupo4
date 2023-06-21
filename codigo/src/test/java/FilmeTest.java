@@ -14,7 +14,7 @@ public class FilmeTest {
     Filme filme;
     @BeforeEach
     void setUp(){
-        filme = new Filme("Filme Teste", "Ação", "Português", 120, new Date());
+        filme = new Filme("Filme Teste", "Ação", "Português", 120, new Date(), false);
     }
 
     @Test
@@ -27,7 +27,7 @@ public class FilmeTest {
     public void salvarTodosFilmesTest() throws IOException {
         List<Filme> filmes = new ArrayList<>();
         filmes.add(filme);
-        filmes.add(new Filme("Filme 2", "Comédia", "Inglês", 90, new Date()));
+        filmes.add(new Filme("Filme 2", "Comédia", "Inglês", 90, new Date(), false));
 
         Filme.salvarTodosFilmes(filmes);
 
@@ -40,7 +40,7 @@ public class FilmeTest {
     public void carregarTodosFilmesTest() throws IOException, ClassNotFoundException {
         List<Filme> filmes = new ArrayList<>();
         filmes.add(filme);
-        filmes.add(new Filme("Filme 2", "Comédia", "Inglês", 90, new Date()));
+        filmes.add(new Filme("Filme 2", "Comédia", "Inglês", 90, new Date(), false));
         Filme.salvarTodosFilmes(filmes);
         List<Filme> filmesCarregados = Filme.carregarTodosFilmes();
         assertEquals(filmes.toString(), filmesCarregados.toString());

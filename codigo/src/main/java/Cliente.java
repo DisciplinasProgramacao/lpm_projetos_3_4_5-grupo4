@@ -12,8 +12,7 @@ public class Cliente implements Serializable {
     private String senha;
     Set<Media> listaParaVer;
     List<ItemListaJaVista> listaJaVistas;
-
-    Especialista tipoCliente = null;
+    PermissoesCliente permissoes;
 
     public String getNomeUsuario() {
         return nomeUsuario;
@@ -28,11 +27,19 @@ public class Cliente implements Serializable {
     }
 
     public List<Media> getListaJaVistas() {
-        List<Media> listaVistas = new ArrayList<Media>();
+        List<Media> listaVistas = new ArrayList<>();
         for (ItemListaJaVista media : listaJaVistas) {
             listaVistas.add(media.getMedia());
         }
         return listaVistas;
+    }
+
+    private void init(String nomeUsuario, String senha) {
+        this.nomeUsuario = nomeUsuario;
+        this.senha = senha;
+        this.listaJaVistas = new ArrayList<>();
+        this.listaParaVer = new HashSet<>();
+        permissoes = new ClientePadrao();
     }
 
     /**
@@ -42,10 +49,19 @@ public class Cliente implements Serializable {
      * @param senha       A senha do cliente.
      */
     public Cliente(String nomeUsuario, String senha) {
-        this.nomeUsuario = nomeUsuario;
-        this.senha = senha;
-        this.listaJaVistas = new ArrayList<>();
-        this.listaParaVer = new HashSet<>();
+        init(nomeUsuario, senha);
+    }
+
+    /**
+     * Construtor que cria um cliente com o nome de usuário e senha fornecidos.
+     *
+     * @param nomeUsuario   O nome de usuário do cliente.
+     * @param senha         A senha do cliente.
+     * @param permissoes  A categoria de comentarista do cliente.
+     */
+    public Cliente(String nomeUsuario, String senha, PermissoesCliente permissoes) {
+        init(nomeUsuario, senha);
+        this.permissoes = permissoes;
     }
 
     /**
@@ -54,10 +70,7 @@ public class Cliente implements Serializable {
      * @param splittedCliente Array de strings que representam um cliente
      */
     public Cliente(String[] splittedCliente) {
-        this.nomeUsuario = splittedCliente[1];
-        this.senha = splittedCliente[2];
-        this.listaJaVistas = new ArrayList<>();
-        this.listaParaVer = new HashSet<>();
+        init(splittedCliente[1], splittedCliente[2]);
     }
 
     /**
@@ -110,17 +123,17 @@ public class Cliente implements Serializable {
 
     private boolean audiencia(Media media, Date date) {
         if (isNull(media)) return false;
+        if (media.isLancamento() && !permissoes.podeLancamento()) return false;
+
         Optional<ItemListaJaVista> existe = listaJaVistas.stream()
                 .filter(s -> s.getMedia().getId().equals(media.getId())).findFirst();
-        if (existe.isEmpty()) {
-            media.registrarAudiencia();
-            this.retirarDaLista(media.nome);
-            this.listaJaVistas.add(new ItemListaJaVista(media, date));
-            this.isClienteEspecialista();
-            return true;
-        }
+        if (existe.isPresent()) return false;
 
-        return false;
+        media.registrarAudiencia();
+        this.retirarDaLista(media.nome);
+        this.listaJaVistas.add(new ItemListaJaVista(media, date));
+
+        return true;
     }
 
     /**
@@ -194,23 +207,6 @@ public class Cliente implements Serializable {
     }
 
     /**
-     * Verifica se o cliente esta qualificado como especialista. True para caso
-     * tenha 5 avaliações nos ultimos 30 dias.
-     * 
-     * @return se o cliente é especialista
-     */
-    public boolean isClienteEspecialista() {
-        if (this.midiasValidasDeAvaliacao() >= 5) {
-            this.tipoCliente = new Especialista();
-            return true;
-        } else {
-            this.tipoCliente = null;
-            return false;
-        }
-
-    }
-
-    /**
      * Verifica a quantidade de avaliações que são considerada validas para
      * qualificação de especialista
      * 
@@ -228,19 +224,57 @@ public class Cliente implements Serializable {
      * @param nota       A nota atribuída à mídia.
      * @param comentario O comentário relacionado à avaliação da mídia.
      */
-
     public boolean avaliarComComentario(String nomeMedia, int nota, String comentario) {
-        try {
-            this.tipoCliente.avaliarComComentario(nomeMedia, nota, comentario, this);
-            return true;
-        } catch (NullPointerException e) {
-            System.err.println("Voce deve ser cliente especialista para escrever comentario");
-            return false;
-        }
+        if (!permissoes.podeComentar()) return false;
+
+        var jaViu = listaJaVistas.stream().filter(m -> m.getMedia().getNome().equals(nomeMedia)).findFirst();
+        if (jaViu.isEmpty()) return false;
+
+        var avaliacao = new Avaliacao(this, nota, comentario);
+        jaViu.get().getMedia().addAvaliacao(avaliacao);
+
+        return true;
     }
 
     public boolean equals(Cliente cliente) {
         return this.nomeUsuario.equals(cliente.getNomeUsuario());
+    }
+
+    private void setPermissoes(PermissoesCliente pc) {
+        this.permissoes = pc;
+    }
+
+    public boolean tornarPadrao() {
+        this.setPermissoes(this.permissoes.tornarPadrao());
+
+        return true;
+    }
+
+    public boolean tornarEspecialista() {
+        Date now = new Date();
+        long trintaDiasMs = 30L * 24L * 60L * 60L * 1000L;
+
+        long count = this.listaJaVistas.stream().filter(item -> now.getTime() - item.getDataVizualizacao().getTime() <= trintaDiasMs).count();
+        if (count >= 5) {
+            this.setPermissoes(this.permissoes.tornarEspecialista());
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean tornarProfissional() {
+        this.setPermissoes(this.permissoes.tornarProfissional());
+
+        return true;
+    }
+
+    public boolean podeComentar() {
+        return this.permissoes.podeComentar();
+    }
+
+    public boolean podeLancamento() {
+        return this.permissoes.podeLancamento();
     }
 
     @Override
@@ -249,7 +283,7 @@ public class Cliente implements Serializable {
                 "nomeUsuario='" + nomeUsuario + '\'' +
                 ", listaParaVer=" + listaParaVer +
                 ", listaJaVistas=" + listaJaVistas +
-                ", tipoCliente=" + tipoCliente +
+                ", comentarista=" + permissoes +
                 '}';
     }
 }

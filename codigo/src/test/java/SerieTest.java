@@ -12,19 +12,19 @@ class SerieTest {
     private Serie serie;
     @Test
     void testVerificaAudiencia()  {
-        serie = new Serie("a volta dos que não foram", "comédia", "pt-br", new Date(), 3);
+        serie = new Serie("a volta dos que não foram", "comédia", "pt-br", new Date(), 3, false);
         serie.registrarAudiencia();
         assertEquals(1, serie.getAudiencia());
     }
 
     @Test
     void testInstanciaSerie(){
-        assertThrows(Error.class, () -> new Serie("a volta dos que não foram", "comédia", "pt-br", new Date(), 1));
+        assertThrows(Error.class, () -> new Serie("a volta dos que não foram", "comédia", "pt-br", new Date(), 1, false));
     }
 
     @Test
     public void testGeraDadosSerie() {
-        Serie serie2 = new Serie("Stranger Things", "comédia", "pt-br", new Date(), 4);
+        Serie serie2 = new Serie("Stranger Things", "comédia", "pt-br", new Date(), 4, false);
 
         String dadosSerie = serie2.geraDadosSerie();
 
@@ -37,7 +37,7 @@ class SerieTest {
 
     @Test
     public void salvarTodasSeries() throws IOException {
-        serie = new Serie("a volta dos que não foram", "comédia", "pt-br", new Date(), 3);
+        serie = new Serie("a volta dos que não foram", "comédia", "pt-br", new Date(), 3, false);
         Serie.salvarTodasSeries(List.of(serie));
         assertTrue(new File("data/series.dat").exists());
         new File("data/series.dat").delete();
@@ -45,7 +45,7 @@ class SerieTest {
 
     @Test
     public void carregarTodasSeries() throws IOException, ClassNotFoundException {
-        serie = new Serie("a volta dos que não foram", "comédia", "pt-br", new Date(), 3);
+        serie = new Serie("a volta dos que não foram", "comédia", "pt-br", new Date(), 3, false);
         Serie.salvarTodasSeries(List.of(serie));
         List<Serie> seriesCarregadas = Serie.carregarTodasSeries();
         assertEquals(seriesCarregadas.toString(), List.of(serie).toString());

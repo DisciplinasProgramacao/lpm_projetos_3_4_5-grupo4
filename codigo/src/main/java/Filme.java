@@ -32,8 +32,8 @@ public class Filme extends Media implements Serializable {
      * @param duracao        A duração do filme em minutos.
      * @param dataLancamento A data de lançamento do filme.
      */
-    public Filme(String nome, String genero, String idioma, Integer duracao, Date dataLancamento) {
-        super(nome, genero, idioma, dataLancamento);
+    public Filme(String nome, String genero, String idioma, Integer duracao, Date dataLancamento, boolean lancamento) {
+        super(nome, genero, idioma, dataLancamento, lancamento);
         this.duracao = duracao;
     }
 
