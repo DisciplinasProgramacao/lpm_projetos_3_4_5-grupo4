@@ -269,6 +269,14 @@ public class Cliente implements Serializable {
         return true;
     }
 
+    public boolean podeComentar() {
+        return this.permissoes.podeComentar();
+    }
+
+    public boolean podeLancamento() {
+        return this.permissoes.podeLancamento();
+    }
+
     @Override
     public String toString() {
         return "Cliente{" +

@@ -15,14 +15,13 @@ public class ClienteTest {
     private Serie serie1;
     private Serie serie2;
     private Filme filme1;
-    private Serie serie3;
 
     @BeforeEach
     void setUp() {
         cliente = new Cliente("Nilocan2022", "sabhsjabjhbsajh");
-        filme1 = new Filme("Filme Teste", "Romance", "Português", 120, new Date());
-        serie1 = new Serie("Calcinha Preta Documentário", "Acao", "catalão", new Date(), 11);
-        serie2 = new Serie("Quebrando camas", "Comédia", "russo", new Date(), 13);
+        filme1 = new Filme("Filme Teste", "Romance", "Português", 120, new Date(), false);
+        serie1 = new Serie("Calcinha Preta Documentário", "Acao", "catalão", new Date(), 11, false);
+        serie2 = new Serie("Quebrando camas", "Comédia", "russo", new Date(), 13, false);
     }
 
     @Test
@@ -97,31 +96,18 @@ public class ClienteTest {
     }
 
     @Test
-    public void testIsClienteEspecialista() {
-        Filme f = new Filme("filme 1", "genero 1", "pt", 10, new Date());
-        Filme f2 = new Filme("filme 2", "genero 2", "en", 100, new Date());
-        Filme f3 = new Filme("filme 3", "genero 2", "en", 100, new Date());
-        Filme f4 = new Filme("filme 4", "genero 2", "en", 100, new Date());
-        Filme f5 = new Filme("filme 5", "genero 2", "en", 100, new Date());
-        for (Filme filme : List.of(f, f2, f3, f4, f5)) {
-            cliente.registrarAudiencia(filme);
-        }
-        boolean resultado = cliente.isClienteEspecialista();
-        assertTrue(resultado);
-    }
-
-    @Test
     public void testAvaliarComComentario() {
-        Filme f = new Filme("filme 1", "genero 1", "pt", 10, new Date());
-        Filme f2 = new Filme("filme 2", "genero 2", "en", 100, new Date());
-        Filme f3 = new Filme("filme 3", "genero 2", "en", 100, new Date());
-        Filme f4 = new Filme("filme 4", "genero 2", "en", 100, new Date());
-        Filme f5 = new Filme("filme 5", "genero 2", "en", 100, new Date());
+        Filme f = new Filme("filme 1", "genero 1", "pt", 10, new Date(), false);
+        Filme f2 = new Filme("filme 2", "genero 2", "en", 100, new Date(), false);
+        Filme f3 = new Filme("filme 3", "genero 2", "en", 100, new Date(), false);
+        Filme f4 = new Filme("filme 4", "genero 2", "en", 100, new Date(), false);
+        Filme f5 = new Filme("filme 5", "genero 2", "en", 100, new Date(), false);
 
         for (Filme filme : List.of(f, f2, f3, f4, f5)) {
             cliente.registrarAudiencia(filme);
         }
 
+        cliente.tornarEspecialista();
         cliente.avaliarComComentario("filme 1", 5, "Ótimo filme!");
 
         Media media = cliente.listaJaVistas.stream()
@@ -142,8 +128,8 @@ public class ClienteTest {
     public void testMidiasValidasDeAvaliacao() {
         Cliente cliente = new Cliente("Lob", "loblob");
 
-        Filme f1 = new Filme("filme 1", "genero 1", "pt", 10, new Date());
-        Filme f2 = new Filme("filme 2", "genero 2", "en", 100, new Date());
+        Filme f1 = new Filme("filme 1", "genero 1", "pt", 10, new Date(), false);
+        Filme f2 = new Filme("filme 2", "genero 2", "en", 100, new Date(), false);
 
         cliente.registrarAudiencia(f1);
         cliente.registrarAudiencia(f2);
@@ -160,5 +146,39 @@ public class ClienteTest {
         cliente.registrarAudiencia(serie1);
 
         assertFalse(cliente.getListaParaVer().contains(serie1));
+    }
+
+
+    @Test
+    void testTornarPadrao() {
+        assertTrue(cliente.tornarPadrao());
+        assertFalse(cliente.podeComentar());
+        assertFalse(cliente.podeLancamento());
+    }
+
+    @Test
+    void testTornarEspecialista() {
+        Filme f = new Filme("filme 1", "genero 1", "pt", 100, new Date(), false);
+        Filme f2 = new Filme("filme 2", "genero 2", "en", 100, new Date(), false);
+        Filme f3 = new Filme("filme 3", "genero 2", "en", 100, new Date(), false);
+        Filme f4 = new Filme("filme 4", "genero 2", "en", 100, new Date(), false);
+        for (Filme filme : List.of(f, f2, f3, f4)) {
+            cliente.registrarAudiencia(filme);
+        }
+        assertFalse(cliente.tornarEspecialista());
+
+        Filme f5 = new Filme("filme 5", "genero 2", "en", 100, new Date(), false);
+        cliente.registrarAudiencia(f5);
+
+        assertTrue(cliente.tornarEspecialista());
+        assertTrue(cliente.podeComentar());
+        assertFalse(cliente.podeLancamento());
+    }
+
+    @Test
+    void testTornarProfissional() {
+        assertTrue(cliente.tornarProfissional());
+        assertTrue(cliente.podeComentar());
+        assertTrue(cliente.podeLancamento());
     }
 }
