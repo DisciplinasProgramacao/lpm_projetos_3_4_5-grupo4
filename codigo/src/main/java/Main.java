@@ -108,6 +108,9 @@ public class Main {
                     System.out.println("Usuário ou senha inválidos. Tente novamente");
                     return handleLogin(ps);
                 }
+                if (!cliente.podeLancamento()) {
+                    if (!cliente.tornarEspecialista()) cliente.tornarPadrao();
+                }
 
                 return cliente;
             case 2:
@@ -234,9 +237,13 @@ public class Main {
         Media media = ps.buscarMidia(nome);
 
         if (!isNull(media)) {
-            if (ps.registrarAudiencia(nome))
+            if (ps.registrarAudiencia(nome)) {
                 System.out.println("Audiência registrada");
-            else System.out.println("Você já assistiu essa mídia");
+                if (ps.getClienteAtual().tornarEspecialista())
+                    System.out.println("Parabéns! Você se tornou um Especialista. " +
+                        "Agora você pode adicionar comentários às suas avaliações");
+            }
+            else System.out.println("Você já assistiu a essa mídia");
         }
         else {
             System.out.println("Mídia não encontrada. Tente novamente\n");
@@ -307,6 +314,10 @@ public class Main {
     }
 
     private static void handleAvaliarComentar(Cliente cliente) {
+        if (!cliente.podeComentar()) {
+            System.out.println("Você não pode fazer avaliações com comentários");
+            return;
+        }
         System.out.println("Avaliar com comentário");
         System.out.print("Nome: ");
         String nome = sc.nextLine();
@@ -318,6 +329,10 @@ public class Main {
 
         if (cliente.avaliarComComentario(nome, nota, comentario))
             System.out.println("Avaliação registrada");
+        else {
+            System.out.println("Você não assistiu a essa mídia. Tente novamente");
+            handleAvaliarComentar(cliente);
+        }
     }
 
     private static int handleFilmeOuSerie(String prefix) {

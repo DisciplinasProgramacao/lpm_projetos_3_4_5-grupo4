@@ -82,6 +82,10 @@ public class PlataformaStreaming {
         return nome;
     }
 
+    public Cliente getClienteAtual() {
+        return clienteAtual;
+    }
+
     /**
      * Adiciona uma nova mídia à plataforma de streaming.
      * @param midia a mídia a ser adicionada
