@@ -16,7 +16,7 @@ public class RelatorioTest {
             String nomeCliente = "Cliente " + i;
             Cliente cliente = new Cliente(nomeCliente, "123");
             plataforma.adicionarCliente(cliente);
-            Filme filme = new Filme("Filme Teste " + i, "Romance", "Português", 120, new Date());
+            Filme filme = new Filme(i, "Filme Teste " + i, "Romance", "Português", 120, new Date());
             plataforma.adicionarMidia(filme);
         }
     }
@@ -26,12 +26,12 @@ public class RelatorioTest {
        int auxCliente2 = 0;
        int auxCliente3 = 0;
        for (Media m : plataforma.getMidias()) {
-            plataforma.getClientes().get(0).adicionarNaListaJaVistas(new ItemListaJaVista(m, new Date()));
+            plataforma.getClientes().get(0).listaJaVistas.add(new ItemListaJaVista(m, new Date()));
             if (auxCliente2 < 30) {
-                plataforma.getClientes().get(1).adicionarNaListaJaVistas(new ItemListaJaVista(m, new Date()));
+                plataforma.getClientes().get(1).listaJaVistas.add((new ItemListaJaVista(m, new Date())));
             }
             if (auxCliente3 < 50) {
-                plataforma.getClientes().get(2).adicionarNaListaJaVistas(new ItemListaJaVista(m, new Date()));
+                plataforma.getClientes().get(2).listaJaVistas.add((new ItemListaJaVista(m, new Date())));
             }
             auxCliente2++;
             auxCliente3++;
@@ -43,15 +43,15 @@ public class RelatorioTest {
     void testeClienteQueMaisAvaliou() {
         int auxCliente2 = 0;
         plataforma.getMidias().forEach(media -> {
-            plataforma.getClientes().get(0).adicionarNaListaJaVistas(new ItemListaJaVista(media));
+            plataforma.getClientes().get(0).listaJaVistas.add((new ItemListaJaVista(media)));
             plataforma.getClientes().get(0).avaliar(media.nome, 4);
         });
         for (Media media: plataforma.getMidias()) {
             if (auxCliente2 < 40) {
                 Cliente c1 = plataforma.getClientes().get(1);
                 Cliente c2 = plataforma.getClientes().get(2);
-                c1.adicionarNaListaJaVistas(new ItemListaJaVista(media));
-                c2.adicionarNaListaJaVistas(new ItemListaJaVista(media));
+                c1.listaJaVistas.add((new ItemListaJaVista(media)));
+                c2.listaJaVistas.add((new ItemListaJaVista(media)));
                 c1.avaliar(media.nome, 4);
                 c2.avaliar(media.nome, 4);
             } else {
@@ -67,15 +67,15 @@ public class RelatorioTest {
     void testePorcentagemClientesComMais15Avaliacoes() {
         int auxCliente2 = 0;
         plataforma.getMidias().forEach(media -> {
-            plataforma.getClientes().get(0).adicionarNaListaJaVistas(new ItemListaJaVista(media));
+            plataforma.getClientes().get(0).listaJaVistas.add((new ItemListaJaVista(media)));
             plataforma.getClientes().get(0).avaliar(media.nome, 4);
         });
         for (Media media: plataforma.getMidias()) {
             if (auxCliente2 < 40) {
                 Cliente c1 = plataforma.getClientes().get(1);
                 Cliente c2 = plataforma.getClientes().get(2);
-                c1.adicionarNaListaJaVistas(new ItemListaJaVista(media));
-                c2.adicionarNaListaJaVistas(new ItemListaJaVista(media));
+                c1.listaJaVistas.add((new ItemListaJaVista(media)));
+                c2.listaJaVistas.add((new ItemListaJaVista(media)));
                 c1.avaliar(media.nome, 4);
                 c2.avaliar(media.nome, 4);
             } else {
@@ -93,14 +93,14 @@ public class RelatorioTest {
         for (int i = 0; i < 2; i++) {
             maisAvaliadas.add(plataforma.getMidias().get(i));
                 for (Cliente c: plataforma.getClientes()){
-                    c.adicionarNaListaJaVistas(new ItemListaJaVista(plataforma.getMidias().get(i)));
+                    c.listaJaVistas.add((new ItemListaJaVista(plataforma.getMidias().get(i))));
                     c.avaliar(plataforma.getMidias().get(i).nome, 4);
                 }
         }
         plataforma.getMidias().get(0).addAvaliacao(new Avaliacao(new Cliente("teste", "123"), 5));
         for (int i = 11; i< plataforma.getMidias().size(); i++) {
             for (int j = 0; j < 50; j++) {
-                plataforma.getClientes().get(j).adicionarNaListaJaVistas(new ItemListaJaVista(plataforma.getMidias().get(i)));
+                plataforma.getClientes().get(j).listaJaVistas.add((new ItemListaJaVista(plataforma.getMidias().get(i))));
                 plataforma.getClientes().get(j).avaliar(plataforma.getMidias().get(i).nome, 4);
             }
         }
@@ -115,14 +115,14 @@ public class RelatorioTest {
             String nomeCliente = "Cliente " + i*10000;
             Cliente cliente = new Cliente(nomeCliente, "123");
             plataforma.adicionarCliente(cliente);
-            Filme filme = new Filme("Filme Teste " + i, "Suspense", "Português", 120, new Date());
+            Filme filme = new Filme(i, "Filme Teste " + i, "Suspense", "Português", 120, new Date());
             plataforma.adicionarMidia(filme);
         }
         List<Media> mediaSuspensePlataforma = plataforma.getMidias().stream().filter(m -> m.getGenero().equals("Suspense")).collect(Collectors.toList());
         for (int i = 0; i < 2; i++) {
             maisAvaliadas.add(mediaSuspensePlataforma.get(i));
             for (Cliente c: plataforma.getClientes()){
-                c.adicionarNaListaJaVistas(new ItemListaJaVista(mediaSuspensePlataforma.get(i)));
+                c.listaJaVistas.add((new ItemListaJaVista(mediaSuspensePlataforma.get(i))));
                 c.avaliar(mediaSuspensePlataforma.get(i).nome, 4);
             }
         }
@@ -138,7 +138,7 @@ public class RelatorioTest {
             mediasMaisVistas.add(m);
             for (int j = 0; j < plataforma.getClientes().size(); j++) {
                 Cliente c = plataforma.getClientes().get(j);
-                c.adicionarNaListaJaVistas(new ItemListaJaVista(m));
+                c.listaJaVistas.add((new ItemListaJaVista(m)));
             }
         }
         assertEquals(Relatorio.dezMidiasComMaisVisualizacoes(plataforma), mediasMaisVistas);
@@ -150,9 +150,9 @@ public class RelatorioTest {
             String nomeCliente = i + " Cliente";
             Cliente cliente = new Cliente(nomeCliente, "123");
             plataforma.adicionarCliente(cliente);
-            Filme filme = new Filme("Filme Teste " + i, "Policial", "Português", 120, new Date());
+            Filme filme = new Filme(i, "Filme Teste " + i, "Policial", "Português", 120, new Date());
             plataforma.adicionarMidia(filme);
-            cliente.adicionarNaListaJaVistas(new ItemListaJaVista(filme));
+            cliente.listaJaVistas.add((new ItemListaJaVista(filme)));
         }
 
         List<Media> mediasMaisVistas = new ArrayList<>();
@@ -162,7 +162,7 @@ public class RelatorioTest {
             mediasMaisVistas.add(m);
             for (int j = 0; j < plataforma.getClientes().size(); j++) {
                 Cliente c = plataforma.getClientes().get(j);
-                c.adicionarNaListaJaVistas(new ItemListaJaVista(m));
+                c.listaJaVistas.add((new ItemListaJaVista(m)));
             }
         }
         assertEquals(Relatorio.dezMidiasMaisVisualizacoesPorGenero(plataforma, "Policial"), mediasMaisVistas);
