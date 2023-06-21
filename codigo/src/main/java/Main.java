@@ -34,7 +34,8 @@ public class Main {
             System.out.println("4 - Gerenciar sua Lista para Ver");
             System.out.println("5 - Avaliar");
             System.out.println("6 - Avaliar e Comentar");
-            System.out.println("7 - Logoff");
+            System.out.println("7 - Relatórios");
+            System.out.println("8 - Logoff");
             System.out.println("0 - Sair da " + ps.getNome());
             printDivider();
 
@@ -45,6 +46,7 @@ public class Main {
                 op = -1;
             }
             sc.nextLine();
+            System.out.println();
 
             switch (op) {
                 case 1:
@@ -72,6 +74,9 @@ public class Main {
                     handleAvaliarComentar(cliente);
                     break;
                 case 7:
+                    handleRelatorios(ps);
+                    break;
+                case 8:
                     ps.logoff();
                     main(args);
                     sc.close();
@@ -107,6 +112,9 @@ public class Main {
                 if (isNull(cliente)) {
                     System.out.println("Usuário ou senha inválidos. Tente novamente");
                     return handleLogin(ps);
+                }
+                if (!cliente.podeLancamento()) {
+                    if (!cliente.tornarEspecialista()) cliente.tornarPadrao();
                 }
 
                 return cliente;
@@ -234,9 +242,13 @@ public class Main {
         Media media = ps.buscarMidia(nome);
 
         if (!isNull(media)) {
-            if (ps.registrarAudiencia(nome))
+            if (ps.registrarAudiencia(nome)) {
                 System.out.println("Audiência registrada");
-            else System.out.println("Você já assistiu essa mídia");
+                if (ps.getClienteAtual().tornarEspecialista())
+                    System.out.println("Parabéns! Você se tornou um Especialista. " +
+                        "Agora você pode adicionar comentários às suas avaliações");
+            }
+            else System.out.println("Você já assistiu a essa mídia");
         }
         else {
             System.out.println("Mídia não encontrada. Tente novamente\n");
@@ -307,6 +319,10 @@ public class Main {
     }
 
     private static void handleAvaliarComentar(Cliente cliente) {
+        if (!cliente.podeComentar()) {
+            System.out.println("Você não pode fazer avaliações com comentários");
+            return;
+        }
         System.out.println("Avaliar com comentário");
         System.out.print("Nome: ");
         String nome = sc.nextLine();
@@ -318,6 +334,75 @@ public class Main {
 
         if (cliente.avaliarComComentario(nome, nota, comentario))
             System.out.println("Avaliação registrada");
+        else {
+            System.out.println("Você não assistiu a essa mídia. Tente novamente");
+            handleAvaliarComentar(cliente);
+        }
+    }
+
+    private static void handleRelatorios(PlataformaStreaming ps) {
+        while (true) {
+            System.out.println("Relatórios disponíveis:");
+            System.out.println("1 - Cliente com mais mídias");
+            System.out.println("2 - Cliente que mais avaliou");
+            System.out.println("3 - Porcentagem de clientes com mais de 15 avaliações");
+            System.out.println("4 - Top 10 mídias mais avaliadas com mínino de 100 avaliações");
+            System.out.println("5 - Top 10 mídias mais avaliadas com mínino de 100 avaliações por gênero");
+            System.out.println("6 - Top 10 mídias com mais visualizações");
+            System.out.println("7 - Top 10 mídias mais visualizações por gênero");
+            System.out.println("0 - Voltar");
+
+            System.out.print("Escolha uma opção: ");
+            int op = sc.nextInt();
+            sc.nextLine();
+
+            if (op == 0) return;
+
+            switch (op) {
+                case 1:
+                    System.out.println();
+                    System.out.println(Relatorio.clienteComMaisMidias(ps));
+                    System.out.println();
+                    break;
+                case 2:
+                    System.out.println();
+                    System.out.println(Relatorio.clienteQueMaisAvaliou(ps));
+                    System.out.println();
+                    break;
+                case 3:
+                    System.out.println();
+                    System.out.println(Relatorio.porcentagemClientesMaisDe15Avaliacoes(ps));
+                    System.out.println();
+                    break;
+                case 4:
+                    System.out.println();
+                    System.out.println(Relatorio.dezMidiasMaisAvaliadasComMininoDe100Avaliacoes(ps));
+                    System.out.println();
+                    break;
+                case 5:
+                    System.out.print("Por qual gênero deseja filtrar? ");
+                    String g = sc.nextLine();
+                    System.out.println();
+                    System.out.println(Relatorio.dezMidiasMaisAvaliadasComMininoDe100AvaliacoesPorGenero(ps, g));
+                    System.out.println();
+                    break;
+                case 6:
+                    System.out.println();
+                    System.out.println(Relatorio.dezMidiasComMaisVisualizacoes(ps));
+                    System.out.println();
+                    break;
+                case 7:
+                    System.out.print("Por qual gênero deseja filtrar? ");
+                    String g1 = sc.nextLine();
+                    System.out.println();
+                    System.out.println(Relatorio.dezMidiasMaisVisualizacoesPorGenero(ps, g1));
+                    System.out.println();
+                    break;
+                default:
+                    System.out.println("Opção inválida. Tente novamente");
+                    handleRelatorios(ps);
+            }
+        }
     }
 
     private static int handleFilmeOuSerie(String prefix) {
